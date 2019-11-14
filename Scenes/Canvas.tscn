@@ -1,0 +1,103 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
+[ext_resource path="res://Sprites/Alala_walk.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/HitBox.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Animation" id=1]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "walk"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+
+[node name="Canvas" type="Node2D"]
+script = ExtResource( 1 )
+GRID_COLOR = Color( 0.494118, 0.494118, 0.494118, 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 128.705, 77.4996 )
+current = true
+zoom = Vector2( 0.25, 0.25 )
+limit_left = 0
+limit_top = 0
+limit_right = 300
+limit_bottom = 200
+
+[node name="ZoomDelay" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="MiddlePoint" type="Position2D" parent="."]
+position = Vector2( 128.36, 77.3163 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource( 2 )
+
+[node name="AnimationSelector" type="OptionButton" parent="CanvasLayer"]
+margin_right = 41.0
+margin_bottom = 20.0
+text = "Selecione a Animacão"
+
+[node name="PlayBtn" type="Button" parent="CanvasLayer"]
+margin_left = 189.036
+margin_right = 227.036
+margin_bottom = 20.0
+text = "Play"
+
+[node name="StopBtn" type="Button" parent="CanvasLayer"]
+margin_left = 235.028
+margin_right = 273.028
+margin_bottom = 20.0
+text = "Stop"
+
+[node name="CurrentSprite" type="Node2D" parent="."]
+position = Vector2( -399.98, -254.987 )
+
+[node name="Alala_walk" type="Sprite" parent="CurrentSprite"]
+position = Vector2( 527, 301 )
+texture = ExtResource( 3 )
+hframes = 8
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite/Alala_walk"]
+anims/idle = SubResource( 1 )
+anims/walk = SubResource( 2 )
+
+[node name="Cursor" type="ColorRect" parent="."]
+margin_right = 1.0
+margin_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="HitBox" parent="." instance=ExtResource( 4 )]
+position = Vector2( 132.399, 65.3972 )
+[connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
+[connection signal="item_selected" from="CanvasLayer/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
+[connection signal="pressed" from="CanvasLayer/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
+[connection signal="pressed" from="CanvasLayer/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]
