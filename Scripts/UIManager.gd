@@ -8,7 +8,7 @@ func _process(delta):
 	if not loaded_animations:
 		animation_player = get_parent().animation_player
 		for animation in animation_player.get_animation_list():
-			$AnimationSelector.add_item(animation)
+			$Header/Separator/AnimationSelector.add_item(animation)
 		
 		loaded_animations = true
 		

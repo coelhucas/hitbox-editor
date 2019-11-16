@@ -2,7 +2,7 @@ extends CanvasItem
 
 onready var animation_player: AnimationPlayer = $CurrentSprite/Player/AnimationPlayer
 
-const GRID_LINE_SIZE: int = 200
+const GRID_LINE_SIZE: int = 160
 export var GRID_COLOR: Color
 export var BACKGROUND_COLOR: Color
 
@@ -36,7 +36,7 @@ func _process(delta):
 		$CurrentSprite/Player/AnimationPlayer.seek($CurrentSprite/Player/AnimationPlayer.current_animation_position - 0.1, true)
 	
 	if old_animation_position != $CurrentSprite/Player/AnimationPlayer.current_animation_position:
-		$CanvasLayer/HBoxContainer/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/Player/AnimationPlayer.current_animation_position * 10))
+		$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/Player/AnimationPlayer.current_animation_position * 10))
 		old_animation_position = $CurrentSprite/Player/AnimationPlayer.current_animation_position		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

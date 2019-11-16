@@ -10,6 +10,11 @@ var first_drag: bool = false
 var start_position: Vector2
 var prev_mouse_pos: Vector2
 
+var first_box_click: bool = false
+
+var offset_x
+var offset_y
+
 var is_hovered: bool = false
 var dragging_box: bool = false
 
@@ -18,6 +23,7 @@ var hit_type = HIT_TYPE.Hitbox
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	change_hit_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,24 +34,37 @@ func _process(delta):
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		handle_update(delta)
+	
+	if first_box_click and Input.is_action_just_released("mouse_left"):
+		first_box_click = false
+		offset_x = 0
+		offset_y = 0
+	
+	if is_hovered and Input.is_action_pressed("mouse_left"):
+		if not first_box_click:
+			offset_x = get_global_mouse_position().x - global_position.x
+			offset_y = get_global_mouse_position().y - global_position.y
+			first_box_click = true
 
 func handle_update(delta):
 	prev_mouse_pos = get_global_mouse_position()
 	
-	$Guide.rect_global_position.x = int($Left.rect_global_position.x) + 1.5
-	$Guide.rect_global_position.y = int($Up.rect_global_position.y) + 1.5
-	$Guide.rect_size.y = int(abs($Collider.shape.extents.y)) * 2
-	$Guide.rect_size.x = int(abs($Collider.shape.extents.x)) * 2
+	$Guide.rect_global_position.x = int($Collider.global_position.x) - $Collider.shape.extents.x
+	$Guide.rect_global_position.y = int($Collider.global_position.y) - $Collider.shape.extents.y + 1
+	$Guide.rect_size.y = int(abs($Collider.shape.extents.y) * 2)
+	$Guide.rect_size.x = int(abs($Collider.shape.extents.x) * 2)
 	
-	$Up.rect_global_position = Vector2(global_position.x, $Collider.global_position.y - abs($Collider.shape.extents.y))
-	$Down.rect_global_position = Vector2(global_position.x, global_position.y + int(abs($Collider.shape.extents.y)))
+	$Up.rect_position = Vector2(-0.5, $Collider.position.y - int(abs($Collider.shape.extents.y)) - 1)
+	$Down.rect_position = Vector2(-0.5, $Collider.position.y + int(abs($Collider.shape.extents.y)) - 1)
 	
-	$Left.rect_global_position = Vector2($Collider.global_position.x - abs($Collider.shape.extents.x), global_position.y)
-	$Right.rect_global_position = Vector2($Collider.global_position.x + abs($Collider.shape.extents.x), global_position.y)
+	$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x)) - 1, -0.5)
+	$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x)) - 1, -0.5)
 	
-	
-	if is_hovered and Input.is_action_pressed("mouse_left"):
-		position = Vector2(int(get_global_mouse_position().x), int(get_global_mouse_position().y))
+		
+	if first_box_click:
+		position = Vector2(int(get_global_mouse_position().x - offset_x), int(get_global_mouse_position().y - offset_y))
+#		position = Vector2(int(get_global_mouse_position().x), int(get_global_mouse_position().y))
+		
 	
 	if vertical_resizing:
 		update_collision_shape("vertical")
@@ -65,9 +84,10 @@ func update_collision_shape(axis: String) -> void:
 	var obj_shape: ConvexPolygonShape2D = $Collider.shape
 	
 	if axis == "vertical":
-		obj_shape.extents.y = int(get_global_mouse_position().y) - $Collider.global_position.y
+		obj_shape.extents.y = int(abs(get_global_mouse_position().y - $Collider.global_position.y))
+		print(obj_shape.extents.y)
 	elif axis == "horizontal":
-		obj_shape.extents.x = int(get_global_mouse_position().x) - $Collider.global_position.x
+		obj_shape.extents.x = abs(int(get_global_mouse_position().x) - $Collider.global_position.x)
 
 func on_up_button_down():
 	if not first_drag:
