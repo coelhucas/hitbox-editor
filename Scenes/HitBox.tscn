@@ -1,65 +1,82 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/HitBoxManager.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/ui.png" type="Texture" id=2]
 
-[sub_resource type="ConvexPolygonShape2D" id=1]
-points = PoolVector2Array( -10, -10, 10, -10, 10, 10, -10, 10 )
+[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="Theme" id=2]
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 1, 0, 0, 1 )
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 2 )
+region_rect = Rect2( 0, 0, 9, 9 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=5]
 size = 0
 
 [node name="HitBox" type="Node2D"]
 script = ExtResource( 1 )
+hitbox_color = Color( 0, 1, 0.462745, 0.184314 )
+hurtbox_color = Color( 1, 0, 0, 0.172549 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
+[node name="Guide" type="ColorRect" parent="."]
 margin_left = -10.0
 margin_top = -10.0
 margin_right = 10.0
 margin_bottom = 10.0
+color = Color( 1, 0.254902, 0.254902, 0.207843 )
 
 [node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -0.0689278 )
 shape = SubResource( 1 )
 
-[node name="LeftUp" type="Button" parent="."]
+[node name="Up" type="Button" parent="."]
+margin_left = -1.0
+margin_top = -11.0
+margin_right = 1.0
+margin_bottom = -9.0
+rect_pivot_offset = Vector2( 1, 1 )
+theme = SubResource( 2 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
+
+[node name="Left" type="Button" parent="."]
 margin_left = -10.8394
-margin_top = -10.5458
+margin_top = -1.15675
 margin_right = -8.83936
-margin_bottom = -8.5458
+margin_bottom = 0.843248
 theme = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
-custom_fonts/font = SubResource( 4 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 
-[node name="LeftDown" type="Button" parent="."]
-margin_left = -10.8394
-margin_top = 8.56049
-margin_right = -8.83936
-margin_bottom = 10.5605
-theme = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
-custom_fonts/font = SubResource( 4 )
-
-[node name="RightUp" type="Button" parent="."]
+[node name="Right" type="Button" parent="."]
 margin_left = 9.06524
-margin_top = -10.5458
+margin_top = -0.960768
 margin_right = 11.0652
-margin_bottom = -8.5458
+margin_bottom = 1.03923
 theme = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
-custom_fonts/font = SubResource( 4 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 
-[node name="RightDown" type="Button" parent="."]
-margin_left = 9.06524
-margin_top = 8.56049
-margin_right = 11.0652
-margin_bottom = 10.5605
+[node name="Down" type="Button" parent="."]
+margin_left = -1.0
+margin_top = 9.0
+margin_right = 1.0
+margin_bottom = 11.0
+rect_pivot_offset = Vector2( 0.977736, 0.990578 )
 theme = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
-custom_fonts/font = SubResource( 4 )
-[connection signal="button_down" from="LeftUp" to="." method="_on_LeftUp_button_down"]
-[connection signal="button_up" from="LeftUp" to="." method="_on_LeftUp_button_up"]
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
+
+[node name="Position2D" type="Position2D" parent="."]
+position = Vector2( 0, -10 )
+[connection signal="mouse_entered" from="Guide" to="." method="_on_Guide_mouse_entered"]
+[connection signal="mouse_exited" from="Guide" to="." method="_on_Guide_mouse_exited"]
+[connection signal="button_down" from="Up" to="." method="on_up_button_down"]
+[connection signal="button_up" from="Up" to="." method="_on_LeftUp_button_up"]
+[connection signal="button_down" from="Left" to="." method="_on_Left_button_down"]
+[connection signal="button_up" from="Left" to="." method="_on_Left_button_up"]
+[connection signal="button_down" from="Right" to="." method="_on_Right_button_down"]
+[connection signal="button_up" from="Right" to="." method="_on_Right_button_up"]
+[connection signal="button_down" from="Down" to="." method="_on_Down_button_down"]
+[connection signal="button_up" from="Down" to="." method="_on_Down_button_up"]

@@ -1,12 +1,15 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
-[ext_resource path="res://Sprites/Alala_walk.png" type="Texture" id=3]
-[ext_resource path="res://Scenes/HitBox.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scripts/GridDrawer.gd" type="Script" id=3]
+[ext_resource path="res://Sprites/Playernew.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/HitBox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=6]
 
-[sub_resource type="Animation" id=1]
-resource_name = "idle"
+[sub_resource type="Animation" id=3]
+resource_name = "backdash"
+length = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -14,10 +17,169 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0 ]
+"values": [ 19, 20, 21, 22, 23, 24, 25 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "fall"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 16, 17, 18 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "hurt"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 44, 45 ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "idle"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "jump"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 14, 15, 16 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "left_kick"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 66, 67, 68, 69, 70, 71, 72 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "left_punch"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 52, 53, 54, 55, 56, 57, 58 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "parry"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 27, 28, 29, 30, 31, 32, 32 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "right_kick"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 59, 60, 61, 62, 63, 64 ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "right_punch"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 47, 48, 49, 50, 51 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "taunt"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -34,31 +196,41 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+"values": [ 6, 7, 8, 9, 10, 11, 12, 13 ]
 }
 
 [node name="Canvas" type="Node2D"]
 script = ExtResource( 1 )
-GRID_COLOR = Color( 0.494118, 0.494118, 0.494118, 1 )
+GRID_COLOR = Color( 0.454902, 0.490196, 0.560784, 0.509804 )
+BACKGROUND_COLOR = Color( 0.32549, 0.352941, 0.333333, 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 128.705, 77.4996 )
+position = Vector2( 82.2955, 77.4996 )
 current = true
 zoom = Vector2( 0.25, 0.25 )
 limit_left = 0
 limit_top = 0
-limit_right = 300
-limit_bottom = 200
+limit_right = 180
+limit_bottom = 100
 
 [node name="ZoomDelay" type="Timer" parent="."]
 wait_time = 0.05
 one_shot = true
 
 [node name="MiddlePoint" type="Position2D" parent="."]
-position = Vector2( 128.36, 77.3163 )
+position = Vector2( 77.9393, 62.4194 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource( 2 )
+
+[node name="Grid" type="Control" parent="CanvasLayer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 3.0
+size_flags_horizontal = 15
+size_flags_vertical = 15
+script = ExtResource( 3 )
 
 [node name="AnimationSelector" type="OptionButton" parent="CanvasLayer"]
 margin_right = 41.0
@@ -77,17 +249,52 @@ margin_right = 273.028
 margin_bottom = 20.0
 text = "Stop"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+margin_left = 285.641
+margin_right = 389.641
+margin_bottom = 20.0
+
+[node name="Button" type="Button" parent="CanvasLayer/HBoxContainer"]
+visible = false
+margin_right = 20.0
+margin_bottom = 20.0
+text = "<"
+
+[node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/HBoxContainer"]
+margin_top = 3.0
+margin_right = 56.0
+margin_bottom = 17.0
+text = "Frame: 0"
+
+[node name="Button2" type="Button" parent="CanvasLayer/HBoxContainer"]
+visible = false
+margin_left = 60.0
+margin_right = 80.0
+margin_bottom = 20.0
+text = ">"
+
 [node name="CurrentSprite" type="Node2D" parent="."]
-position = Vector2( -399.98, -254.987 )
+position = Vector2( 78, 36 )
 
-[node name="Alala_walk" type="Sprite" parent="CurrentSprite"]
-position = Vector2( 527, 301 )
-texture = ExtResource( 3 )
-hframes = 8
-frame = 1
+[node name="Player" type="Sprite" parent="CurrentSprite"]
+texture = ExtResource( 4 )
+vframes = 7
+hframes = 12
+frame = 18
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite/Alala_walk"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite/Player"]
+autoplay = "backdash"
+anims/backdash = SubResource( 3 )
+anims/fall = SubResource( 4 )
+anims/hurt = SubResource( 5 )
 anims/idle = SubResource( 1 )
+anims/jump = SubResource( 6 )
+anims/left_kick = SubResource( 7 )
+anims/left_punch = SubResource( 8 )
+anims/parry = SubResource( 9 )
+anims/right_kick = SubResource( 10 )
+anims/right_punch = SubResource( 11 )
+anims/taunt = SubResource( 12 )
 anims/walk = SubResource( 2 )
 
 [node name="Cursor" type="ColorRect" parent="."]
@@ -95,9 +302,15 @@ margin_right = 1.0
 margin_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="HitBox" parent="." instance=ExtResource( 4 )]
-position = Vector2( 132.399, 65.3972 )
+[node name="HitBox" parent="." instance=ExtResource( 5 )]
+position = Vector2( 122, 65 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+autoplay = true
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
+[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
+[connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
 [connection signal="item_selected" from="CanvasLayer/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]
