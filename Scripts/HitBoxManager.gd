@@ -30,7 +30,10 @@ func _ready():
 func _process(delta):
 	
 	if is_hovered and Input.is_action_just_pressed("mouse_right"):
-		change_hit_type()
+		if hit_type == HIT_TYPE.Hitbox:
+			change_hit_type(HIT_TYPE.Hurtbox)
+		else:
+			change_hit_type(HIT_TYPE.Hitbox)
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		handle_update(delta)
@@ -72,12 +75,12 @@ func handle_update(delta):
 	if horizontal_resizing:
 		update_collision_shape("horizontal")
 
-func change_hit_type() -> void:
+func change_hit_type(which = HIT_TYPE.Hurtbox) -> void:
+	hit_type = which
+	
 	if hit_type == HIT_TYPE.Hitbox:
-		hit_type = HIT_TYPE.Hurtbox
 		$Guide.color = hurtbox_color
 	else:
-		hit_type = HIT_TYPE.Hitbox
 		$Guide.color = hitbox_color
 	
 func update_collision_shape(axis: String) -> void:
