@@ -50,6 +50,7 @@ func _process(delta):
 		if not first_box_click:
 			offset_x = get_global_mouse_position().x - global_position.x
 			offset_y = get_global_mouse_position().y - global_position.y
+			get_parent().move_child(self, get_parent().get_child_count() - 1)
 			first_box_click = true
 
 func handle_update(delta):
