@@ -23,7 +23,10 @@ var hit_type = HIT_TYPE.Hitbox
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	var collision_shape: RectangleShape2D = RectangleShape2D.new()
+	collision_shape.extents.x = 10
+	collision_shape.extents.y = 10
+	$Collider.shape = collision_shape
 	change_hit_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -65,7 +68,7 @@ func handle_update(delta):
 	
 		
 	if first_box_click:
-		position = Vector2(int(get_global_mouse_position().x - offset_x), int(get_global_mouse_position().y - offset_y))
+		global_position = Vector2(int(get_global_mouse_position().x - offset_x), int(get_global_mouse_position().y - offset_y))
 #		position = Vector2(int(get_global_mouse_position().x), int(get_global_mouse_position().y))
 		
 	

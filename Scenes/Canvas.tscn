@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
@@ -7,8 +7,7 @@
 [ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=5]
 [ext_resource path="res://CustomInterfaces/Normal.tres" type="StyleBox" id=6]
 [ext_resource path="res://Sprites/Playernew.png" type="Texture" id=7]
-[ext_resource path="res://Scenes/HitBox.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=9]
+[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=8]
 
 [sub_resource type="Animation" id=4]
 length = 0.7
@@ -210,7 +209,7 @@ wait_time = 0.05
 one_shot = true
 
 [node name="MiddlePoint" type="Position2D" parent="."]
-position = Vector2( 77.9393, 62.4194 )
+position = Vector2( 80, 40 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource( 2 )
@@ -229,22 +228,31 @@ margin_right = 640.0
 margin_bottom = 21.0
 
 [node name="Separator" type="HBoxContainer" parent="CanvasLayer/Header"]
-margin_left = 1.0
+margin_left = 12.0
 margin_right = 638.0
 margin_bottom = 20.0
 custom_constants/separation = 16
 
-[node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_right = 154.0
+[node name="NewBtn" type="Button" parent="CanvasLayer/Header/Separator"]
+margin_right = 56.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
-text = "Selecione a Animacão"
+text = "New Box"
+
+[node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
+margin_left = 72.0
+margin_right = 195.0
+margin_bottom = 20.0
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 6 )
+text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 170.0
-margin_right = 196.0
+margin_left = 211.0
+margin_right = 237.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
@@ -252,8 +260,8 @@ custom_styles/normal = ExtResource( 6 )
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 212.0
-margin_right = 240.0
+margin_left = 253.0
+margin_right = 281.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
@@ -270,9 +278,9 @@ custom_styles/normal = ExtResource( 6 )
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
-margin_left = 256.0
+margin_left = 297.0
 margin_top = 3.0
-margin_right = 312.0
+margin_right = 353.0
 margin_bottom = 17.0
 text = "Frame: 0"
 
@@ -315,15 +323,15 @@ margin_right = 1.0
 margin_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="HitBox" parent="." instance=ExtResource( 8 )]
-position = Vector2( 122, 65 )
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 9 )
+stream = ExtResource( 8 )
 autoplay = true
+
+[node name="Boxes" type="Node2D" parent="."]
+position = Vector2( 80, 24 )
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
-[connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
+[connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
 [connection signal="item_selected" from="CanvasLayer/Header/Separator/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]
