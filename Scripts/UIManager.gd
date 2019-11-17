@@ -9,6 +9,13 @@ var h_boxes
 var player
 
 func _ready():
+	$Header/SaveFile.add_filter("*.JSON ; JSON Files")
+	$Header/SaveFile.connect("confirmed", self, "_save_at_dir")
+	var file_popup = $Header/Separator/File.get_popup()
+	file_popup.connect("id_pressed", self, "_file_option_selected")
+	file_popup.add_item("Open")
+	file_popup.add_item("Save")
+	
 	$Header/Separator/NewBtn.connect("pressed", self, "_create_box")
 	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	player = get_tree().get_root().get_node("Canvas/CurrentSprite/Player")
@@ -49,6 +56,17 @@ func save_data(current_frame: int):
 		}
 	#print(Utils.boxes_data)
 		
+func _file_option_selected(ID: int):
+	match ID:
+		1:
+			$Header/SaveFile.visible = true
+
+func _save_at_dir():
+	var dir: String = $Header/SaveFile.get_current_path()
+	var file = File.new()
+	file.open(dir, File.WRITE)
+	file.store_string(to_json(Utils.boxes_data))
+	file.close()
 
 func _on_AnimationSelector_item_selected(ID):
 	animation_player.stop()

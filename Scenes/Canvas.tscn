@@ -234,8 +234,14 @@ margin_right = 638.0
 margin_bottom = 20.0
 custom_constants/separation = 16
 
+[node name="File" type="MenuButton" parent="CanvasLayer/Header/Separator"]
+margin_right = 35.0
+margin_bottom = 20.0
+text = "File"
+
 [node name="NewBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_right = 56.0
+margin_left = 51.0
+margin_right = 107.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
@@ -243,8 +249,8 @@ custom_styles/normal = ExtResource( 6 )
 text = "New Box"
 
 [node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 72.0
-margin_right = 195.0
+margin_left = 123.0
+margin_right = 246.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
@@ -252,8 +258,8 @@ custom_styles/normal = ExtResource( 6 )
 text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 211.0
-margin_right = 237.0
+margin_left = 262.0
+margin_right = 288.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
@@ -261,8 +267,8 @@ custom_styles/normal = ExtResource( 6 )
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 253.0
-margin_right = 281.0
+margin_left = 304.0
+margin_right = 332.0
 margin_bottom = 20.0
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
@@ -279,9 +285,9 @@ custom_styles/normal = ExtResource( 6 )
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
-margin_left = 297.0
+margin_left = 348.0
 margin_top = 3.0
-margin_right = 353.0
+margin_right = 404.0
 margin_bottom = 17.0
 text = "Frame: 0"
 
@@ -294,6 +300,16 @@ custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
 text = ">"
+
+[node name="SaveFile" type="FileDialog" parent="CanvasLayer/Header"]
+margin_left = 140.578
+margin_top = 57.0
+margin_right = 534.578
+margin_bottom = 333.0
+resizable = true
+access = 1
+current_dir = "user://Users/lcrabbit/Projects/Hitbox Editor"
+current_path = "user://Users/lcrabbit/Projects/Hitbox Editor/"
 
 [node name="CurrentSprite" type="Node2D" parent="."]
 position = Vector2( 80, 24 )

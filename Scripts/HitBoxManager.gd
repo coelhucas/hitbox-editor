@@ -96,8 +96,8 @@ func handle_update(delta):
 	$Up.rect_position = Vector2(-0.5, $Collider.position.y - int(abs($Collider.shape.extents.y) + 1))
 	$Down.rect_position = Vector2(-0.5, $Collider.position.y + int(abs($Collider.shape.extents.y) - 1))
 	
-	$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x) + 1), 0)
-	$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x) - 1), 0)
+	$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x) + 1), -0.5)
+	$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x) - 1), -0.5)
 	
 		
 	if dragging_box:

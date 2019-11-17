@@ -97,7 +97,7 @@ func display_updated_data():
 			print("There's no data for the current frame")
 
 func _input(e):
-	if (e is InputEventMouseButton):
+	if (e is InputEventMouseButton and not $CanvasLayer/Header/SaveFile.visible):
 		if e.button_index == BUTTON_WHEEL_UP:
 			zoom_in()
 		
