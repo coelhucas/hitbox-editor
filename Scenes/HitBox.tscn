@@ -50,8 +50,6 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 
 [node name="Collider" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( 0, -0.0689278 )
 shape = SubResource( 1 )
 
 [node name="Up" type="Button" parent="."]

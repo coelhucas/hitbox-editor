@@ -5,9 +5,13 @@ onready var box: PackedScene = preload("res://Scenes/HitBox.tscn")
 var animation_player: AnimationPlayer
 
 var loaded_animations: bool = false
+var h_boxes
+var player
 
 func _ready():
 	$Header/Separator/NewBtn.connect("pressed", self, "_create_box")
+	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
+	player = get_tree().get_root().get_node("Canvas/CurrentSprite/Player")
 	pass
 	
 func _process(delta):
@@ -17,6 +21,33 @@ func _process(delta):
 			$Header/Separator/AnimationSelector.add_item(animation)
 		
 		loaded_animations = true
+
+func save_data(current_frame: int):
+	print("Saved data from " + str(current_frame))
+	var boxes_array: Array = []
+	for box in h_boxes.get_children():
+		var collider: CollisionShape2D = box.get_node("Collider")
+		var type = box.hit_type
+		var pos = collider.global_position - player.global_position
+		var dimensions: Dictionary = {
+			"x": collider.shape.extents.x,
+			"y": collider.shape.extents.y
+		}
+		boxes_array.append({
+			"type": type,
+			"position": {
+				"x": pos.x,
+				"y": pos.y,
+			},
+			"dimensions": dimensions
+		})
+	if	Utils.boxes_data.has(animation_player.assigned_animation):
+		Utils.boxes_data[animation_player.assigned_animation][str(current_frame)] = boxes_array
+	else:
+		Utils.boxes_data[animation_player.assigned_animation] = {
+			str(current_frame): boxes_array	
+		}
+	#print(Utils.boxes_data)
 		
 
 func _on_AnimationSelector_item_selected(ID):

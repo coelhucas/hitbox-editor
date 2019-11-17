@@ -10,7 +10,7 @@
 [ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=8]
 
 [sub_resource type="Animation" id=4]
-length = 0.7
+length = 0.6
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -86,7 +86,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=9]
-length = 0.7
+length = 0.6
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -302,7 +302,7 @@ position = Vector2( 80, 24 )
 texture = ExtResource( 7 )
 vframes = 7
 hframes = 12
-frame = 58
+frame = 72
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite/Player"]
 autoplay = "backdash"

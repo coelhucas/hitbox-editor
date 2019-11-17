@@ -22,7 +22,7 @@ var is_hovered: bool = false
 var is_focused: bool = false
 var dragging_box: bool = false
 
-enum HIT_TYPE { Hitbox, Hurtbox }
+enum HIT_TYPE { Hitbox = 0, Hurtbox = 1 }
 var hit_type = HIT_TYPE.Hitbox
 
 func _ready():
@@ -58,11 +58,11 @@ func _process(delta):
 		get_parent().move_child(self, get_parent().get_child_count() - 1)
 		
 		if not first_box_click:
-				offset_x = get_global_mouse_position().x - rect_global_position.x
-				offset_y = get_global_mouse_position().y - rect_global_position.y
+			offset_x = get_global_mouse_position().x - rect_global_position.x
+			offset_y = get_global_mouse_position().y - rect_global_position.y
 				
-		first_box_click = true
-		dragging_box = true
+			first_box_click = true
+			dragging_box = true
 		
 		for child in get_parent().get_children():
 			if child.name != name:
@@ -71,6 +71,7 @@ func _process(delta):
 	if is_focused and Input.is_action_just_released("mouse_left"):
 		is_focused = false
 		dragging_box = false
+		first_box_click = false
 	
 	if not is_hovered and Input.is_action_just_pressed("mouse_left"):
 		is_focused = false
@@ -88,15 +89,15 @@ func handle_update(delta):
 	prev_mouse_pos = get_global_mouse_position()
 	
 	$Guide.rect_global_position.x = int($Collider.global_position.x) - $Collider.shape.extents.x
-	$Guide.rect_global_position.y = int($Collider.global_position.y) - $Collider.shape.extents.y + 1
+	$Guide.rect_global_position.y = int($Collider.global_position.y) - $Collider.shape.extents.y
 	$Guide.rect_size.y = int(abs($Collider.shape.extents.y) * 2)
 	$Guide.rect_size.x = int(abs($Collider.shape.extents.x) * 2)
 	
-	$Up.rect_position = Vector2(-0.5, $Collider.position.y - int(abs($Collider.shape.extents.y)) - 1)
-	$Down.rect_position = Vector2(-0.5, $Collider.position.y + int(abs($Collider.shape.extents.y)) - 1)
+	$Up.rect_position = Vector2(-0.5, $Collider.position.y - int(abs($Collider.shape.extents.y) + 1))
+	$Down.rect_position = Vector2(-0.5, $Collider.position.y + int(abs($Collider.shape.extents.y) - 1))
 	
-	$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x)) - 1, -0.5)
-	$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x)) - 1, -0.5)
+	$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x) + 1), 0)
+	$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x) - 1), 0)
 	
 		
 	if dragging_box:
