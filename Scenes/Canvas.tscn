@@ -215,10 +215,11 @@ position = Vector2( 80, 40 )
 script = ExtResource( 2 )
 
 [node name="Grid" type="Control" parent="CanvasLayer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = 3.0
+mouse_filter = 2
+mouse_default_cursor_shape = 3
 size_flags_horizontal = 15
 size_flags_vertical = 15
 script = ExtResource( 3 )
@@ -329,6 +330,7 @@ autoplay = true
 
 [node name="Boxes" type="Node2D" parent="."]
 position = Vector2( 80, 24 )
+z_index = 1
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
 [connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]

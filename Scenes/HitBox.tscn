@@ -1,41 +1,56 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/HitBoxManager.gd" type="Script" id=1]
-[ext_resource path="res://Sprites/ui.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/hitbox-selected-background.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/ui.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="Theme" id=2]
 
 [sub_resource type="StyleBoxTexture" id=5]
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 0, 0, 9, 9 )
 
 [sub_resource type="StyleBoxTexture" id=6]
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 0, 0, 9, 9 )
 
 [sub_resource type="StyleBoxTexture" id=3]
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 0, 0, 9, 9 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 0
 
-[node name="HitBox" type="Node2D"]
+[node name="HitBox" type="Control"]
+focus_neighbour_left = NodePath("Guide")
+focus_neighbour_top = NodePath("Guide")
+focus_neighbour_right = NodePath("Guide")
+focus_neighbour_bottom = NodePath("Guide")
+focus_next = NodePath("Guide")
+focus_previous = NodePath("Guide")
+focus_mode = 1
 script = ExtResource( 1 )
 hitbox_color = Color( 0, 1, 0.462745, 0.184314 )
 hurtbox_color = Color( 1, 0, 0, 0.172549 )
 
-[node name="Guide" type="ColorRect" parent="."]
+[node name="Guide" type="NinePatchRect" parent="."]
 margin_left = -10.0
 margin_top = -10.0
 margin_right = 10.0
 margin_bottom = 10.0
-rect_pivot_offset = Vector2( 10, 10 )
-color = Color( 1, 0.254902, 0.254902, 0.207843 )
+focus_mode = 2
+mouse_filter = 1
+mouse_default_cursor_shape = 6
+texture = ExtResource( 2 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
 
 [node name="Collider" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, -0.0689278 )
 shape = SubResource( 1 )
 
@@ -89,11 +104,3 @@ custom_fonts/font = SubResource( 4 )
 position = Vector2( 0, -10 )
 [connection signal="mouse_entered" from="Guide" to="." method="_on_Guide_mouse_entered"]
 [connection signal="mouse_exited" from="Guide" to="." method="_on_Guide_mouse_exited"]
-[connection signal="button_down" from="Up" to="." method="on_up_button_down"]
-[connection signal="button_up" from="Up" to="." method="_on_LeftUp_button_up"]
-[connection signal="button_down" from="Left" to="." method="_on_Left_button_down"]
-[connection signal="button_up" from="Left" to="." method="_on_Left_button_up"]
-[connection signal="button_down" from="Right" to="." method="_on_Right_button_down"]
-[connection signal="button_up" from="Right" to="." method="_on_Right_button_up"]
-[connection signal="button_down" from="Down" to="." method="_on_Down_button_down"]
-[connection signal="button_up" from="Down" to="." method="_on_Down_button_up"]

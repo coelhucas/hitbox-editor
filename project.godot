@@ -19,6 +19,10 @@ config/name="Hitbox Editor"
 run/main_scene="res://Scenes/Canvas.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Utils="*res://Scripts/Utils.gd"
+
 [display]
 
 window/size/width=640

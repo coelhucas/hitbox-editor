@@ -37,4 +37,4 @@ func _create_box():
 	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
 	box_instance.name = "HBOX" + str(boxes_parent.get_child_count())
 	boxes_parent.add_child(box_instance)
-	box_instance.global_position = get_tree().get_root().get_node("Canvas/MiddlePoint").global_position
+	box_instance.rect_global_position = get_tree().get_root().get_node("Canvas/MiddlePoint").global_position
