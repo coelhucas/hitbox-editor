@@ -128,7 +128,6 @@ func update_collision_shape(axis: String) -> void:
 	
 	if axis == "vertical":
 		obj_shape.extents.y = int(abs(get_global_mouse_position().y - $Collider.global_position.y))
-		print(obj_shape.extents.y)
 	elif axis == "horizontal":
 		obj_shape.extents.x = abs(int(get_global_mouse_position().x) - $Collider.global_position.x)
 

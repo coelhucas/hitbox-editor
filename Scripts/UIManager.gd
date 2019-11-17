@@ -11,6 +11,9 @@ var player
 func _ready():
 	$Header/SaveFile.add_filter("*.JSON ; JSON Files")
 	$Header/SaveFile.connect("confirmed", self, "_save_at_dir")
+	$Header/OpenFile.add_filter("*.JSON ; JSON Files")
+	$Header/OpenFile.connect("file_selected", self, "_open_file")
+	
 	var file_popup = $Header/Separator/File.get_popup()
 	file_popup.connect("id_pressed", self, "_file_option_selected")
 	file_popup.add_item("Open")
@@ -30,7 +33,6 @@ func _process(delta):
 		loaded_animations = true
 
 func save_data(current_frame: int):
-	print("Saved data from " + str(current_frame))
 	var boxes_array: Array = []
 	for box in h_boxes.get_children():
 		var collider: CollisionShape2D = box.get_node("Collider")
@@ -54,18 +56,35 @@ func save_data(current_frame: int):
 		Utils.boxes_data[animation_player.assigned_animation] = {
 			str(current_frame): boxes_array	
 		}
-	#print(Utils.boxes_data)
 		
 func _file_option_selected(ID: int):
 	match ID:
+		0:
+			$Header/OpenFile.visible = true
+			$Header/OpenFile.invalidate()
+			if $Header/SaveFile.visible:
+				$Header/SaveFile.visible = false
 		1:
 			$Header/SaveFile.visible = true
+			$Header/SaveFile.invalidate()
+			if $Header/OpenFile.visible:
+				$Header/OpenFile.visible = false
 
 func _save_at_dir():
 	var dir: String = $Header/SaveFile.get_current_path()
 	var file = File.new()
 	file.open(dir, File.WRITE)
 	file.store_string(to_json(Utils.boxes_data))
+	file.close()
+
+func _open_file(dir: String):
+	var file = File.new()
+	if not file.file_exists(dir):
+		return
+	
+	file.open(dir, File.READ)
+	Utils.boxes_data = parse_json(file.get_as_text())
+	get_parent().display_updated_data()
 	file.close()
 
 func _on_AnimationSelector_item_selected(ID):

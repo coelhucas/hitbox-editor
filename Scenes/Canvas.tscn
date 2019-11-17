@@ -307,9 +307,21 @@ margin_top = 57.0
 margin_right = 534.578
 margin_bottom = 333.0
 resizable = true
-access = 1
-current_dir = "user://Users/lcrabbit/Projects/Hitbox Editor"
-current_path = "user://Users/lcrabbit/Projects/Hitbox Editor/"
+access = 2
+current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
+current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
+
+[node name="OpenFile" type="FileDialog" parent="CanvasLayer/Header"]
+margin_left = 140.578
+margin_top = 57.0
+margin_right = 534.578
+margin_bottom = 333.0
+window_title = "Open a File"
+resizable = true
+mode = 0
+access = 2
+current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
+current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
 
 [node name="CurrentSprite" type="Node2D" parent="."]
 position = Vector2( 80, 24 )

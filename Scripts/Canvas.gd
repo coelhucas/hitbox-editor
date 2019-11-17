@@ -79,25 +79,17 @@ func display_updated_data():
 	
 	
 	if Utils.boxes_data.has($CurrentSprite/Player/AnimationPlayer.assigned_animation):
-		print("Has assigned animation")
-		print("Looking for data on frame " + str($CurrentSprite/Player/AnimationPlayer.current_animation_position * 10))
 		if Utils.boxes_data[$CurrentSprite/Player/AnimationPlayer.assigned_animation].has(str(round($CurrentSprite/Player/AnimationPlayer.current_animation_position * 10))):
-			print("Has current frame")
 			var current_frame_data = Utils.boxes_data[$CurrentSprite/Player/AnimationPlayer.assigned_animation][str(int(round($CurrentSprite/Player/AnimationPlayer.current_animation_position * 10)))]
-			print(current_frame_data)
 			for box in current_frame_data:
 				var new_box = box_scene.instance()
 				var new_box_collider = new_box.get_node("Collider")
-				#new_box.type = box.type
 				boxes.add_child(new_box)
 				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + player.global_position
 				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
-		else:
-			print(Utils.boxes_data)
-			print("There's no data for the current frame")
 
 func _input(e):
-	if (e is InputEventMouseButton and not $CanvasLayer/Header/SaveFile.visible):
+	if (e is InputEventMouseButton and not $CanvasLayer/Header/SaveFile.visible) and not $CanvasLayer/Header/OpenFile.visible:
 		if e.button_index == BUTTON_WHEEL_UP:
 			zoom_in()
 		
@@ -110,7 +102,6 @@ func zoom_in():
 		$ZoomDelay.start()
 		$Camera2D.global_position = get_global_mouse_position()
 		$Camera2D.zoom = $Camera2D.zoom / ZOOM_AMOUNT
-		print(1 / $Camera2D.zoom.x)
 	
 func zoom_out():
 	if $Camera2D.zoom.x < 0.25 and can_zoom:
@@ -118,7 +109,6 @@ func zoom_out():
 		$ZoomDelay.start()
 		$Camera2D.global_position = get_global_mouse_position()
 		$Camera2D.zoom = $Camera2D.zoom * ZOOM_AMOUNT
-		print(1 / $Camera2D.zoom.x)
 
 func _draw():
 	if not grid_ready:
