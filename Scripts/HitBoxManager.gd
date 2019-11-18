@@ -22,8 +22,9 @@ var is_hovered: bool = false
 var is_focused: bool = false
 var dragging_box: bool = false
 
-enum HIT_TYPE { Hitbox = 0, Hurtbox = 1 }
-var hit_type = HIT_TYPE.Hitbox
+var current_frame: float
+
+var hit_type: String = "hitbox"
 
 func _ready():
 	
@@ -31,8 +32,6 @@ func _ready():
 	collision_shape.extents.x = 10
 	collision_shape.extents.y = 10
 	$Collider.shape = collision_shape
-	change_hit_type()
-	update_selection(box_background_texture, 0.2)
 	
 	# Mouse enter/Mouse exit
 	$Guide.connect("mouse_entered", self, "_drag_area_mouse_entered")
@@ -49,8 +48,17 @@ func _ready():
 	$Up.connect("button_up", self, "_up_scaler_up")
 	$Right.connect("button_up", self, "_right_scaler_up")
 	$Down.connect("button_up", self, "_down_scaler_up")
+	
+	
+	if hit_type == "hitbox":
+		$Guide.modulate = hitbox_color
+	else:
+		$Guide.modulate = hurtbox_color
 
 func _process(delta):
+	
+	if current_frame != get_tree().get_root().get_node("Canvas/CurrentSprite/Player/AnimationPlayer").current_animation_position * 10:
+		current_frame = get_tree().get_root().get_node("Canvas/CurrentSprite/Player/AnimationPlayer").current_animation_position * 10
 	
 	if is_hovered and Input.is_action_pressed("mouse_left"):
 		is_focused = true
@@ -77,10 +85,7 @@ func _process(delta):
 		is_focused = false
 	
 	if is_hovered and Input.is_action_just_pressed("mouse_right"):
-		if hit_type == HIT_TYPE.Hitbox:
-			change_hit_type(HIT_TYPE.Hurtbox)
-		else:
-			change_hit_type(HIT_TYPE.Hitbox)
+		change_hit_type()
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		handle_update(delta)
@@ -110,26 +115,32 @@ func handle_update(delta):
 		update_collision_shape("horizontal")
 
 func update_selection(texture: Texture, alpha: float):
+	get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
 	$Guide.texture = texture
 	$Guide.modulate.a = alpha
 		
-func change_hit_type(which = HIT_TYPE.Hurtbox) -> void:
-	hit_type = which
-	
-	if hit_type == HIT_TYPE.Hitbox:
+func change_hit_type() -> void:
+	if hit_type == "hitbox":
 		$Guide.modulate = hurtbox_color
+		hit_type = "hurtbox"
 	else:
 		$Guide.modulate = hitbox_color
+		hit_type = "hitbox"
 	
-	update_selection($Guide.texture, $Guide.modulate.a)
+	if not is_focused:
+		update_selection(selected_box_background_texture, 0.5)
+	else:
+		update_selection(box_background_texture, 0.2)
 	
 func update_collision_shape(axis: String) -> void:
 	var obj_shape: ConvexPolygonShape2D = $Collider.shape
 	
 	if axis == "vertical":
 		obj_shape.extents.y = int(abs(get_global_mouse_position().y - $Collider.global_position.y))
+#		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
 	elif axis == "horizontal":
 		obj_shape.extents.x = abs(int(get_global_mouse_position().x) - $Collider.global_position.x)
+#		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
 
 func _up_scaler_down():
 	if not first_drag:

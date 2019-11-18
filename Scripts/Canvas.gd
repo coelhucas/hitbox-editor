@@ -84,9 +84,10 @@ func display_updated_data():
 			for box in current_frame_data:
 				var new_box = box_scene.instance()
 				var new_box_collider = new_box.get_node("Collider")
+				new_box.hit_type = box.type
 				boxes.add_child(new_box)
-				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + player.global_position
 				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
+				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + player.global_position
 
 func _input(e):
 	if (e is InputEventMouseButton and not $CanvasLayer/Header/SaveFile.visible) and not $CanvasLayer/Header/OpenFile.visible:
