@@ -232,6 +232,7 @@ margin_bottom = 21.0
 margin_left = 12.0
 margin_right = 638.0
 margin_bottom = 20.0
+focus_mode = 1
 custom_constants/separation = 16
 
 [node name="File" type="MenuButton" parent="CanvasLayer/Header/Separator"]
@@ -243,45 +244,55 @@ text = "File"
 margin_left = 51.0
 margin_right = 107.0
 margin_bottom = 20.0
+focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
+enabled_focus_mode = 1
 text = "New Box"
 
 [node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
 margin_left = 123.0
 margin_right = 246.0
 margin_bottom = 20.0
+focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
+enabled_focus_mode = 1
 text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
 margin_left = 262.0
 margin_right = 288.0
 margin_bottom = 20.0
+focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
+enabled_focus_mode = 1
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
 margin_left = 304.0
 margin_right = 332.0
 margin_bottom = 20.0
+focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
+enabled_focus_mode = 1
 text = "Stop"
 
 [node name="Button" type="Button" parent="CanvasLayer/Header/Separator"]
 visible = false
 margin_right = 20.0
 margin_bottom = 20.0
+focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )
 custom_styles/normal = ExtResource( 6 )
+enabled_focus_mode = 1
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
