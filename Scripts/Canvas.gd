@@ -16,6 +16,11 @@ var sprite
 var tile_size: int = 1
 var grid_ready: bool = false
 var can_zoom: bool = true
+var first_camera_drag: bool = true
+
+var camera_offset: Vector2
+
+var prev_mouse_pos: Vector2
 
 var boxes
 var current_boxes: Array
@@ -31,31 +36,39 @@ func _ready():
 
 func _process(delta):
 	
+	if prev_mouse_pos != get_global_mouse_position():
+		mouse_update()
+		
+	prev_mouse_pos = get_global_mouse_position()
+	
+	
 	if $CurrentSprite/AnimationPlayer.is_playing() and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
 		display_updated_data()
 		prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
 	
 	$Cursor.rect_position = get_global_mouse_position()
-	
-	if Input.is_action_pressed("cam_down"):
-		$Camera2D.position.y += CAM_SPEED * $Camera2D.zoom.x
-	if Input.is_action_pressed("cam_up"):
-		$Camera2D.position.y -= CAM_SPEED * $Camera2D.zoom.x
-	if Input.is_action_pressed("cam_right"):
-		$Camera2D.position.x += CAM_SPEED * $Camera2D.zoom.x
-	if Input.is_action_pressed("cam_left"):
-		$Camera2D.position.x -= CAM_SPEED * $Camera2D.zoom.x
-	
+
 	if Input.is_action_just_pressed("ui_right"):
 		update_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
 		
 	elif Input.is_action_just_pressed("ui_left"):
 		update_frame($CurrentSprite/AnimationPlayer.current_animation_position - 0.1)
 	
+	if Input.is_action_pressed("mouse_middle") and first_camera_drag:
+		camera_offset = get_global_mouse_position() - $Camera2D.global_position
+		first_camera_drag = false
+	
+	if Input.is_action_just_released("mouse_middle") and not first_camera_drag:
+		camera_offset = Vector2(0, 0)
+		first_camera_drag = true
+	
 	if old_animation_position != $CurrentSprite/AnimationPlayer.current_animation_position:
 		$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
 		old_animation_position = $CurrentSprite/AnimationPlayer.current_animation_position		
 
+func mouse_update():
+	if not first_camera_drag:
+		pass
 
 func update_frame(next_position: float):
 	$CanvasLayer.save_data($CurrentSprite/AnimationPlayer.current_animation_position * 10)
@@ -99,6 +112,9 @@ func _input(e):
 		
 		if e.button_index == BUTTON_WHEEL_DOWN:
 			zoom_out()
+	elif e is InputEventMouseMotion and not first_camera_drag:
+		$Camera2D.global_position -= e.relative * $Camera2D.zoom.y * 2
+		pass
 
 func zoom_in():
 	if $Camera2D.zoom.x > 0.0625 and can_zoom:

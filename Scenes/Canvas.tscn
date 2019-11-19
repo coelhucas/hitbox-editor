@@ -203,6 +203,8 @@ limit_left = 0
 limit_top = 0
 limit_right = 160
 limit_bottom = 80
+smoothing_enabled = true
+smoothing_speed = 10.0
 
 [node name="ZoomDelay" type="Timer" parent="."]
 wait_time = 0.05
