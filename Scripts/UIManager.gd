@@ -45,6 +45,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("delete_selected"):
 		_delete_selected_box()
 	
+	if Input.is_action_just_pressed("open_import_menu"):
+		_open_import_popup()
+	
 func save_data(current_frame: int):
 	var boxes_array: Array = []
 	for box in h_boxes.get_children():
@@ -146,9 +149,20 @@ func _open_import_popup():
 	$Header/ImportFrame.popup()
 
 func _import_frame_data() -> void:
+	# Clears the import frame text
+	$Header/ImportFrame/Separator/From.text = ""
+	
+	#TO DO: Put this function at Utils to be used from anywhere
 	var selected_frame: String = str(int($Header/ImportFrame/Separator/From.text))
 	if Utils.boxes_data.has(animation_player.assigned_animation):
 		if Utils.boxes_data[animation_player.assigned_animation].has(selected_frame):
-			print("Tengo")
+			for box_data in Utils.boxes_data[animation_player.assigned_animation][selected_frame]:
+				var new_box = box.instance()
+				var new_box_collider = new_box.get_node("Collider")
+				new_box.hit_type = box_data.type
+				new_box.name = "LOADED-HBOX" + str(h_boxes.get_child_count())
+				h_boxes.add_child(new_box)
+				new_box_collider.shape.extents = Vector2(box_data.dimensions.x, box_data.dimensions.y)
+				new_box.rect_global_position = Vector2(box_data.position.x, box_data.position.y) + sprite.global_position
 		else:
 			print("No tengo")

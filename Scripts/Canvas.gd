@@ -41,7 +41,6 @@ func _process(delta):
 		
 	prev_mouse_pos = get_global_mouse_position()
 	
-	
 	if $CurrentSprite/AnimationPlayer.is_playing() and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
 		display_updated_data()
 		prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
@@ -86,7 +85,6 @@ func update_frame(next_position: float):
 	display_updated_data()
 	
 func display_updated_data():
-	#print("nah")
 	for box in boxes.get_children():
 		box.queue_free()
 	
