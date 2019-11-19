@@ -2,7 +2,11 @@ extends CanvasLayer
 
 onready var box: PackedScene = preload("res://Scenes/HitBox.tscn")
 
+const ANIMATED_SCENES_PATH: String = "res://Scenes/Entities/"
+
 var animation_player: AnimationPlayer
+
+var animated_entities_list: Array
 
 var loaded_animations: bool = false
 var h_boxes
@@ -16,17 +20,20 @@ func _ready():
 	
 	var file_popup = $Header/Separator/File.get_popup()
 	file_popup.connect("id_pressed", self, "_file_option_selected")
-	file_popup.add_item("Open")
-	file_popup.add_item("Save")
+	file_popup.add_item("Open (CTRL+O)")
+	file_popup.add_item("Save (CTRL+S)")
 	
 	var box_popup = $Header/Separator/Box.get_popup()
 	box_popup.connect("id_pressed", self, "_box_option_selected")
 	box_popup.add_item("New (A)")
-	box_popup.add_item("Delete (Z)")
+	box_popup.add_item("Delete selected (Z)")
 	box_popup.add_item("Import from another frame (I)")
 	
 	$Header/ImportFrame.connect("confirmed", self, "_import_frame_data")
 	$Header/ImportFrame.register_text_enter($Header/ImportFrame/Separator/From)
+	
+	$Header/Separator/SpriteSelector.connect("item_selected", self, "_change_sprite")
+	load_animated_entities()	
 	
 	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	sprite = get_tree().get_root().get_node("Canvas/CurrentSprite")
@@ -38,17 +45,80 @@ func _process(delta):
 			$Header/Separator/AnimationSelector.add_item(animation)
 		
 		loaded_animations = true
-	
+		
+	# Application shortcuts
+	# Box
 	if Input.is_action_just_pressed("add_new"):
 		_create_box()
 	
 	if Input.is_action_just_pressed("delete_selected"):
 		_delete_selected_box()
-	
+		
 	if Input.is_action_just_pressed("open_import_menu"):
 		_open_import_popup()
+		
+	# Animation
+	if Input.is_action_just_pressed("stop_animation"):
+		animation_player.stop()
+	
+	if Input.is_action_just_pressed("play_animation"):
+		animation_player.play()
+	
+	# File
+	if Input.is_action_just_pressed("save_file"):
+		$Header/SaveFile.visible = true
+		$Header/SaveFile.invalidate()
+	
+	if Input.is_action_just_pressed("open_file"):
+		$Header/OpenFile.visible = true
+		$Header/OpenFile.invalidate()
+		
+
+func load_animated_entities():
+	var animated_entities: Array = []
+	var animated_entities_dir: Directory = Directory.new()
+	animated_entities_dir.open(ANIMATED_SCENES_PATH)
+	animated_entities_dir.list_dir_begin()
+	
+	while true:
+		var file = animated_entities_dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			animated_entities.append(file)
+	
+	animated_entities_dir.list_dir_end()
+	animated_entities_list = animated_entities
+	
+	for entity in animated_entities:
+		$Header/Separator/SpriteSelector.add_item(entity)
+
+func _change_sprite(ID: int):
+	get_parent().get_node("CurrentSprite").name = "Old"
+	get_parent().get_node("Old").queue_free()
+	var sprite_path: String = ANIMATED_SCENES_PATH + str(animated_entities_list[ID])
+	var new_sprite = load(sprite_path).instance()
+	get_parent().add_child(new_sprite)
+	new_sprite.name = "CurrentSprite"
+	_update_sprite_selector()
+	new_sprite.global_position = get_parent().get_node("MiddlePoint").global_position
+	new_sprite.get_node("AnimationPlayer").stop()
+	
+func _update_sprite_selector():
+	animation_player = get_parent().get_node("CurrentSprite/AnimationPlayer")
+		
+	var new_sprite_animations: Array = animation_player.get_animation_list()
+	$Header/Separator/AnimationSelector.items = []
+	
+	for animation in new_sprite_animations:
+		$Header/Separator/AnimationSelector.add_item(animation)
+	$Header/Separator/AnimationSelector.select(0)
+	pass
 	
 func save_data(current_frame: int):
+	if not is_instance_valid(sprite):
+		sprite = get_parent().get_node("CurrentSprite")
+	
 	var boxes_array: Array = []
 	for box in h_boxes.get_children():
 		var collider: CollisionShape2D = box.get_node("Collider")
@@ -110,6 +180,8 @@ func _open_file(dir: String):
 	file.close()
 
 func _on_AnimationSelector_item_selected(ID):
+	animation_player = get_parent().get_node("CurrentSprite/AnimationPlayer")
+
 	animation_player.stop()
 	animation_player.current_animation = animation_player.get_animation_list()[ID]
 	animation_player.play()
@@ -120,7 +192,9 @@ func _on_PlayBtn_pressed():
 
 
 func _on_StopBtn_pressed():
-	animation_player.stop()
+	animation_player.stop(false)
+	animation_player.seek(stepify(animation_player.current_animation_position, 0.1))
+	print(stepify(animation_player.current_animation_position, 0.1))
 
 func _create_box():
 	var box_instance = box.instance()

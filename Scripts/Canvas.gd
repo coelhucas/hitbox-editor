@@ -33,6 +33,8 @@ func _ready():
 	sprite = get_tree().get_root().get_node("Canvas/CurrentSprite")
 	boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	current_boxes = boxes.get_children()
+	
+	sprite.global_position = $MiddlePoint.global_position
 
 func _process(delta):
 	
@@ -40,30 +42,31 @@ func _process(delta):
 		mouse_update()
 		
 	prev_mouse_pos = get_global_mouse_position()
-	
-	if $CurrentSprite/AnimationPlayer.is_playing() and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
-		display_updated_data()
-		prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
-	
-	$Cursor.rect_position = get_global_mouse_position()
-
-	if Input.is_action_just_pressed("ui_right"):
-		update_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
+	if $CurrentSprite:
+		if $CurrentSprite/AnimationPlayer.is_playing() and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
+			display_updated_data()
+			prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
+			
+			$Cursor.rect_position = get_global_mouse_position()
 		
-	elif Input.is_action_just_pressed("ui_left"):
-		update_frame($CurrentSprite/AnimationPlayer.current_animation_position - 0.1)
-	
+			if old_animation_position != $CurrentSprite/AnimationPlayer.current_animation_position:
+				$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
+				old_animation_position = $CurrentSprite/AnimationPlayer.current_animation_position		
+				
+		if Input.is_action_just_pressed("ui_right"):
+			update_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
+				
+		elif Input.is_action_just_pressed("ui_left"):
+			update_frame($CurrentSprite/AnimationPlayer.current_animation_position - 0.1)
+			
 	if Input.is_action_pressed("mouse_middle") and first_camera_drag:
 		camera_offset = get_global_mouse_position() - $Camera2D.global_position
 		first_camera_drag = false
-	
+			
 	if Input.is_action_just_released("mouse_middle") and not first_camera_drag:
 		camera_offset = Vector2(0, 0)
 		first_camera_drag = true
-	
-	if old_animation_position != $CurrentSprite/AnimationPlayer.current_animation_position:
-		$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
-		old_animation_position = $CurrentSprite/AnimationPlayer.current_animation_position		
+			
 
 func mouse_update():
 	if not first_camera_drag:
@@ -77,11 +80,13 @@ func update_frame(next_position: float):
 	
 	if next_position > $CurrentSprite/AnimationPlayer.current_animation_length:
 		$CurrentSprite/AnimationPlayer.seek(0, true)
+		print("ba")
 	elif next_position < 0:
-		$CurrentSprite/AnimationPlayer.seek($CurrentSprite/AnimationPlayer.current_animation_length)
+		$CurrentSprite/AnimationPlayer.seek($CurrentSprite/AnimationPlayer.current_animation_length, true)
 	else:
 		$CurrentSprite/AnimationPlayer.seek(next_position, true)
 	
+	$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
 	display_updated_data()
 	
 func display_updated_data():
@@ -110,9 +115,9 @@ func _input(e):
 		
 		if e.button_index == BUTTON_WHEEL_DOWN:
 			zoom_out()
-	elif e is InputEventMouseMotion and not first_camera_drag:
+	
+	if e is InputEventMouseMotion and not first_camera_drag:
 		$Camera2D.global_position -= e.relative * $Camera2D.zoom.y * 2
-		pass
 
 func zoom_in():
 	if $Camera2D.zoom.x > 0.0625 and can_zoom:

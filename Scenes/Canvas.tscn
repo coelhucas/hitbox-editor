@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
@@ -6,189 +6,8 @@
 [ext_resource path="res://CustomInterfaces/Hover.tres" type="StyleBox" id=4]
 [ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=5]
 [ext_resource path="res://CustomInterfaces/Normal.tres" type="StyleBox" id=6]
-[ext_resource path="res://Sprites/Playernew.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/Entities/Player.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=8]
-
-[sub_resource type="Animation" id=1]
-length = 0.6
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 19, 20, 21, 22, 23, 24, 25 ]
-}
-
-[sub_resource type="Animation" id=2]
-length = 0.3
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ 16, 17, 18 ]
-}
-
-[sub_resource type="Animation" id=3]
-length = 0.2
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 44, 45 ]
-}
-
-[sub_resource type="Animation" id=4]
-length = 0.6
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5 ]
-}
-
-[sub_resource type="Animation" id=5]
-length = 0.3
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ 14, 15, 16 ]
-}
-
-[sub_resource type="Animation" id=6]
-length = 0.6
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 66, 67, 68, 69, 70, 71, 72 ]
-}
-
-[sub_resource type="Animation" id=7]
-length = 6.0
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 52, 53, 54, 55, 56, 57, 58 ]
-}
-
-[sub_resource type="Animation" id=8]
-length = 0.6
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 27, 28, 29, 30, 31, 32, 32 ]
-}
-
-[sub_resource type="Animation" id=9]
-length = 0.6
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 59, 60, 61, 62, 63, 64 ]
-}
-
-[sub_resource type="Animation" id=10]
-length = 0.5
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 47, 48, 49, 50, 51 ]
-}
-
-[sub_resource type="Animation" id=11]
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ]
-}
-
-[sub_resource type="Animation" id=12]
-length = 0.8
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 6, 7, 8, 9, 10, 11, 12, 13 ]
-}
 
 [node name="Canvas" type="Node2D"]
 script = ExtResource( 1 )
@@ -211,7 +30,7 @@ wait_time = 0.05
 one_shot = true
 
 [node name="MiddlePoint" type="Position2D" parent="."]
-position = Vector2( 80, 40 )
+position = Vector2( 80, 24 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource( 2 )
@@ -248,9 +67,20 @@ margin_right = 87.0
 margin_bottom = 20.0
 text = "Box"
 
-[node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
+[node name="SpriteSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
 margin_left = 103.0
-margin_right = 226.0
+margin_right = 197.0
+margin_bottom = 20.0
+focus_mode = 1
+custom_styles/hover = ExtResource( 4 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 6 )
+enabled_focus_mode = 1
+text = "Select Sprite"
+
+[node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
+margin_left = 213.0
+margin_right = 336.0
 margin_bottom = 20.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
@@ -260,8 +90,8 @@ enabled_focus_mode = 1
 text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 242.0
-margin_right = 268.0
+margin_left = 352.0
+margin_right = 378.0
 margin_bottom = 20.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
@@ -271,8 +101,8 @@ enabled_focus_mode = 1
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 284.0
-margin_right = 312.0
+margin_left = 394.0
+margin_right = 422.0
 margin_bottom = 20.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
@@ -293,9 +123,9 @@ enabled_focus_mode = 1
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
-margin_left = 328.0
+margin_left = 438.0
 margin_top = 3.0
-margin_right = 384.0
+margin_right = 494.0
 margin_bottom = 17.0
 text = "Frame: 0"
 
@@ -353,27 +183,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Frame ID"
 
-[node name="CurrentSprite" type="Sprite" parent="."]
-position = Vector2( 80, 24 )
-texture = ExtResource( 7 )
-vframes = 7
-hframes = 12
-frame = 72
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite"]
-autoplay = "backdash"
-anims/backdash = SubResource( 1 )
-anims/fall = SubResource( 2 )
-anims/hurt = SubResource( 3 )
-anims/idle = SubResource( 4 )
-anims/jump = SubResource( 5 )
-anims/left_kick = SubResource( 6 )
-anims/left_punch = SubResource( 7 )
-anims/parry = SubResource( 8 )
-anims/right_kick = SubResource( 9 )
-anims/right_punch = SubResource( 10 )
-anims/taunt = SubResource( 11 )
-anims/walk = SubResource( 12 )
+[node name="CurrentSprite" parent="." instance=ExtResource( 7 )]
 
 [node name="Cursor" type="ColorRect" parent="."]
 margin_right = 1.0
