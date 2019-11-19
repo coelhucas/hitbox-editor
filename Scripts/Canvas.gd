@@ -33,6 +33,7 @@ func _ready():
 	sprite = get_tree().get_root().get_node("Canvas/CurrentSprite")
 	boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	current_boxes = boxes.get_children()
+	get_tree().get_root().connect("size_changed", self, "_on_screen_resized")
 	
 	sprite.global_position = $MiddlePoint.global_position
 
@@ -130,11 +131,12 @@ func zoom_in():
 		$Camera2D.zoom = $Camera2D.zoom / ZOOM_AMOUNT
 	
 func zoom_out():
-	if $Camera2D.zoom.x < 0.25 and can_zoom:
+	if $Camera2D.zoom.x < 0.125 and can_zoom:
 		can_zoom = false
 		$ZoomDelay.start()
 		$Camera2D.global_position = get_global_mouse_position()
 		$Camera2D.zoom = $Camera2D.zoom * ZOOM_AMOUNT
+		print(1/$Camera2D.zoom.x)
 
 func _draw():
 	if not grid_ready:
@@ -153,7 +155,8 @@ func _on_ZoomDelay_timeout():
 	can_zoom = true
 
 
-func _on_Sccreen_resized():
+func _on_screen_resized():
+	print("resized")
 	grid_ready = false
 
 

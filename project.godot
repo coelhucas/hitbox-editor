@@ -25,10 +25,15 @@ Utils="*res://Scripts/Utils.gd"
 
 [display]
 
-window/size/width=640
-window/size/height=360
+window/size/width=1280
+window/size/height=720
+window/vsync/use_vsync=false
 window/stretch/mode="2d"
-window/stretch/aspect="keep_width"
+window/stretch/aspect="expand"
+
+[gui]
+
+theme/custom_font="res://CustomInterfaces/Font.tres"
 
 [importer_defaults]
 

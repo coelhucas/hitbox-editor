@@ -1,17 +1,18 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
 [ext_resource path="res://Scripts/GridDrawer.gd" type="Script" id=3]
-[ext_resource path="res://CustomInterfaces/Hover.tres" type="StyleBox" id=4]
-[ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=5]
-[ext_resource path="res://CustomInterfaces/Normal.tres" type="StyleBox" id=6]
-[ext_resource path="res://Scenes/Entities/Player.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Scripts/Useless/MusicController.gd" type="Script" id=8]
-[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=9]
-[ext_resource path="res://Music/JoJo AMV - Kakyoins Theme - Noble Pope.ogg" type="AudioStream" id=10]
-[ext_resource path="res://Music/Josuke theme but its only the good part.ogg" type="AudioStream" id=11]
-[ext_resource path="res://Music/Jotaro Theme but only the Good Parts are in.ogg" type="AudioStream" id=12]
+[ext_resource path="res://CustomInterfaces/Font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://CustomInterfaces/Hover.tres" type="StyleBox" id=5]
+[ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=6]
+[ext_resource path="res://CustomInterfaces/Normal.tres" type="StyleBox" id=7]
+[ext_resource path="res://Scenes/Entities/Player.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scripts/Useless/MusicController.gd" type="Script" id=9]
+[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=10]
+[ext_resource path="res://Music/JoJo AMV - Kakyoins Theme - Noble Pope.ogg" type="AudioStream" id=11]
+[ext_resource path="res://Music/Josuke theme but its only the good part.ogg" type="AudioStream" id=12]
+[ext_resource path="res://Music/Jotaro Theme but only the Good Parts are in.ogg" type="AudioStream" id=13]
 
 [node name="Canvas" type="Node2D"]
 script = ExtResource( 1 )
@@ -21,7 +22,7 @@ BACKGROUND_COLOR = Color( 0.32549, 0.352941, 0.333333, 1 )
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 82.2955, 77.4996 )
 current = true
-zoom = Vector2( 0.25, 0.25 )
+zoom = Vector2( 0.125, 0.125 )
 limit_left = 0
 limit_top = 0
 limit_right = 160
@@ -43,94 +44,110 @@ script = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = 3.0
+grow_horizontal = 0
 mouse_filter = 2
 mouse_default_cursor_shape = 3
-size_flags_horizontal = 15
-size_flags_vertical = 15
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 3 )
 
 [node name="Header" type="Panel" parent="CanvasLayer"]
-margin_right = 640.0
-margin_bottom = 21.0
+margin_right = 1280.0
+margin_bottom = 28.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
 [node name="Separator" type="HBoxContainer" parent="CanvasLayer/Header"]
 margin_left = 12.0
-margin_right = 638.0
-margin_bottom = 20.0
+margin_right = 1280.0
+margin_bottom = 28.0
 focus_mode = 1
 custom_constants/separation = 16
 
 [node name="File" type="MenuButton" parent="CanvasLayer/Header/Separator"]
-margin_right = 35.0
-margin_bottom = 20.0
+margin_right = 56.0
+margin_bottom = 28.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 4 )
 text = "File"
 
 [node name="Box" type="MenuButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 51.0
-margin_right = 87.0
-margin_bottom = 20.0
+margin_left = 72.0
+margin_right = 108.0
+margin_bottom = 28.0
+custom_fonts/font = ExtResource( 4 )
 text = "Box"
 
 [node name="SpriteSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 103.0
-margin_right = 197.0
-margin_bottom = 20.0
+margin_left = 124.0
+margin_right = 281.0
+margin_bottom = 28.0
 focus_mode = 1
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 7 )
+custom_fonts/font = ExtResource( 4 )
 enabled_focus_mode = 1
 text = "Select Sprite"
 
 [node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 213.0
-margin_right = 336.0
-margin_bottom = 20.0
+margin_left = 297.0
+margin_right = 487.0
+margin_bottom = 28.0
 focus_mode = 1
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 7 )
+custom_fonts/font = ExtResource( 4 )
 enabled_focus_mode = 1
 text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 352.0
-margin_right = 378.0
-margin_bottom = 20.0
+margin_left = 503.0
+margin_right = 547.0
+margin_bottom = 28.0
 focus_mode = 1
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 7 )
+custom_fonts/font = ExtResource( 4 )
 enabled_focus_mode = 1
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 394.0
-margin_right = 422.0
-margin_bottom = 20.0
+margin_left = 563.0
+margin_right = 607.0
+margin_bottom = 28.0
 focus_mode = 1
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 7 )
+custom_fonts/font = ExtResource( 4 )
 enabled_focus_mode = 1
 text = "Stop"
 
 [node name="Button" type="Button" parent="CanvasLayer/Header/Separator"]
 visible = false
-margin_right = 20.0
-margin_bottom = 20.0
+margin_left = 623.0
+margin_right = 634.0
+margin_bottom = 28.0
 focus_mode = 1
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 7 )
+custom_fonts/font = ExtResource( 4 )
 enabled_focus_mode = 1
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
-margin_left = 438.0
+margin_left = 623.0
 margin_top = 3.0
-margin_right = 494.0
-margin_bottom = 17.0
+margin_right = 711.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 4 )
 text = "Frame: 0"
 
 [node name="Button2" type="Button" parent="CanvasLayer/Header/Separator"]
@@ -138,26 +155,26 @@ visible = false
 margin_left = 60.0
 margin_right = 80.0
 margin_bottom = 20.0
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 6 )
+custom_styles/normal = ExtResource( 7 )
 text = ">"
 
 [node name="SaveFile" type="FileDialog" parent="CanvasLayer/Header"]
-margin_left = 140.578
-margin_top = 57.0
-margin_right = 534.578
-margin_bottom = 333.0
+margin_left = 391.0
+margin_top = 171.0
+margin_right = 894.0
+margin_bottom = 586.0
 resizable = true
 access = 2
 current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
 current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
 
 [node name="OpenFile" type="FileDialog" parent="CanvasLayer/Header"]
-margin_left = 140.578
-margin_top = 57.0
-margin_right = 534.578
-margin_bottom = 333.0
+margin_left = 389.0
+margin_top = 171.0
+margin_right = 894.0
+margin_bottom = 586.0
 window_title = "Open a File"
 resizable = true
 mode = 0
@@ -166,11 +183,10 @@ current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
 current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
 
 [node name="ImportFrame" type="ConfirmationDialog" parent="CanvasLayer/Header"]
-visible = true
-margin_left = 220.0
-margin_top = 160.0
-margin_right = 420.0
-margin_bottom = 230.0
+margin_left = 559.0
+margin_top = 317.0
+margin_right = 759.0
+margin_bottom = 387.0
 rect_pivot_offset = Vector2( 102, 28 )
 window_title = "Import from frame...."
 
@@ -187,7 +203,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Frame ID"
 
-[node name="CurrentSprite" parent="." instance=ExtResource( 7 )]
+[node name="CurrentSprite" parent="." instance=ExtResource( 8 )]
 
 [node name="Cursor" type="ColorRect" parent="."]
 margin_right = 1.0
@@ -199,11 +215,11 @@ position = Vector2( 80, 24 )
 z_index = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-script = ExtResource( 8 )
-musics = [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ) ]
+script = ExtResource( 9 )
+musics = [ ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ]
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
-[connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
+[connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
 [connection signal="item_selected" from="CanvasLayer/Header/Separator/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]
