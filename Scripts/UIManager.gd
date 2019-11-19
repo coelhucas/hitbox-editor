@@ -149,11 +149,13 @@ func _open_import_popup():
 	$Header/ImportFrame.popup()
 
 func _import_frame_data() -> void:
+	# Save selected frame	
+	var selected_frame: String = str(int($Header/ImportFrame/Separator/From.text))
+	
 	# Clears the import frame text
 	$Header/ImportFrame/Separator/From.text = ""
 	
 	#TO DO: Put this function at Utils to be used from anywhere
-	var selected_frame: String = str(int($Header/ImportFrame/Separator/From.text))
 	if Utils.boxes_data.has(animation_player.assigned_animation):
 		if Utils.boxes_data[animation_player.assigned_animation].has(selected_frame):
 			for box_data in Utils.boxes_data[animation_player.assigned_animation][selected_frame]:
