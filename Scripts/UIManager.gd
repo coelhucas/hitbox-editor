@@ -6,7 +6,7 @@ var animation_player: AnimationPlayer
 
 var loaded_animations: bool = false
 var h_boxes
-var player
+var sprite
 
 func _ready():
 	$Header/SaveFile.add_filter("*.JSON ; JSON Files")
@@ -19,10 +19,17 @@ func _ready():
 	file_popup.add_item("Open")
 	file_popup.add_item("Save")
 	
-	$Header/Separator/NewBtn.connect("pressed", self, "_create_box")
+	var box_popup = $Header/Separator/Box.get_popup()
+	box_popup.connect("id_pressed", self, "_box_option_selected")
+	box_popup.add_item("New (A)")
+	box_popup.add_item("Delete (Z)")
+	box_popup.add_item("Import from another frame (I)")
+	
+	$Header/ImportFrame.connect("confirmed", self, "_import_frame_data")
+	$Header/ImportFrame.register_text_enter($Header/ImportFrame/Separator/From)
+	
 	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
-	player = get_tree().get_root().get_node("Canvas/CurrentSprite/Player")
-	pass
+	sprite = get_tree().get_root().get_node("Canvas/CurrentSprite")
 	
 func _process(delta):
 	if not loaded_animations:
@@ -31,13 +38,19 @@ func _process(delta):
 			$Header/Separator/AnimationSelector.add_item(animation)
 		
 		loaded_animations = true
-
+	
+	if Input.is_action_just_pressed("add_new"):
+		_create_box()
+	
+	if Input.is_action_just_pressed("delete_selected"):
+		_delete_selected_box()
+	
 func save_data(current_frame: int):
 	var boxes_array: Array = []
 	for box in h_boxes.get_children():
 		var collider: CollisionShape2D = box.get_node("Collider")
 		var type = box.hit_type
-		var pos = collider.global_position - player.global_position
+		var pos = collider.global_position - sprite.global_position
 		var dimensions: Dictionary = {
 			"x": collider.shape.extents.x,
 			"y": collider.shape.extents.y
@@ -69,6 +82,12 @@ func _file_option_selected(ID: int):
 			$Header/SaveFile.invalidate()
 			if $Header/OpenFile.visible:
 				$Header/OpenFile.visible = false
+				
+func _box_option_selected(ID: int):
+	match ID:
+		0: _create_box()
+		1: _delete_selected_box()
+		2: _open_import_popup()
 
 func _save_at_dir():
 	var dir: String = $Header/SaveFile.get_current_path()
@@ -104,5 +123,32 @@ func _create_box():
 	var box_instance = box.instance()
 	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
 	box_instance.name = "HBOX" + str(boxes_parent.get_child_count())
+	box_instance.created_manually = true
 	boxes_parent.add_child(box_instance)
 	box_instance.rect_global_position = get_tree().get_root().get_node("Canvas/MiddlePoint").global_position
+
+func _delete_selected_box():
+	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
+	for child in boxes_parent.get_children():
+		if child.is_focused:
+			boxes_parent.remove_child(child)
+			child.queue_free()
+	
+	# Focus the previous box
+	var prev_box_id = boxes_parent.get_child_count() - 1
+	if prev_box_id != -1:
+		boxes_parent.get_child(prev_box_id).focus()
+	
+	# Save updated data
+	save_data(int(animation_player.current_animation_position * 10))
+
+func _open_import_popup():
+	$Header/ImportFrame.popup()
+
+func _import_frame_data() -> void:
+	var selected_frame: String = str(int($Header/ImportFrame/Separator/From.text))
+	if Utils.boxes_data.has(animation_player.assigned_animation):
+		if Utils.boxes_data[animation_player.assigned_animation].has(selected_frame):
+			print("Tengo")
+		else:
+			print("No tengo")

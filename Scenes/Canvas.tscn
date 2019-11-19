@@ -9,7 +9,7 @@
 [ext_resource path="res://Sprites/Playernew.png" type="Texture" id=7]
 [ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=8]
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=1]
 length = 0.6
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -24,7 +24,7 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 24, 25 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=2]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -39,7 +39,7 @@ tracks/0/keys = {
 "values": [ 16, 17, 18 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=3]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -54,7 +54,7 @@ tracks/0/keys = {
 "values": [ 44, 45 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=4]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -70,7 +70,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5 ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=5]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -85,7 +85,7 @@ tracks/0/keys = {
 "values": [ 14, 15, 16 ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=6]
 length = 0.6
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -100,7 +100,7 @@ tracks/0/keys = {
 "values": [ 66, 67, 68, 69, 70, 71, 72 ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=7]
 length = 6.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -115,7 +115,7 @@ tracks/0/keys = {
 "values": [ 52, 53, 54, 55, 56, 57, 58 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=8]
 length = 0.6
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -130,7 +130,7 @@ tracks/0/keys = {
 "values": [ 27, 28, 29, 30, 31, 32, 32 ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=9]
 length = 0.6
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -145,7 +145,7 @@ tracks/0/keys = {
 "values": [ 59, 60, 61, 62, 63, 64 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=10]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -160,7 +160,7 @@ tracks/0/keys = {
 "values": [ 47, 48, 49, 50, 51 ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=11]
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -174,7 +174,7 @@ tracks/0/keys = {
 "values": [ 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=12]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -240,20 +240,15 @@ margin_right = 35.0
 margin_bottom = 20.0
 text = "File"
 
-[node name="NewBtn" type="Button" parent="CanvasLayer/Header/Separator"]
+[node name="Box" type="MenuButton" parent="CanvasLayer/Header/Separator"]
 margin_left = 51.0
-margin_right = 107.0
+margin_right = 87.0
 margin_bottom = 20.0
-focus_mode = 1
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 5 )
-custom_styles/normal = ExtResource( 6 )
-enabled_focus_mode = 1
-text = "New Box"
+text = "Box"
 
 [node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 123.0
-margin_right = 246.0
+margin_left = 103.0
+margin_right = 226.0
 margin_bottom = 20.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
@@ -263,8 +258,8 @@ enabled_focus_mode = 1
 text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 262.0
-margin_right = 288.0
+margin_left = 242.0
+margin_right = 268.0
 margin_bottom = 20.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
@@ -274,8 +269,8 @@ enabled_focus_mode = 1
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 304.0
-margin_right = 332.0
+margin_left = 284.0
+margin_right = 312.0
 margin_bottom = 20.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 4 )
@@ -296,9 +291,9 @@ enabled_focus_mode = 1
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
-margin_left = 348.0
+margin_left = 328.0
 margin_top = 3.0
-margin_right = 404.0
+margin_right = 384.0
 margin_bottom = 17.0
 text = "Frame: 0"
 
@@ -334,29 +329,49 @@ access = 2
 current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
 current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
 
-[node name="CurrentSprite" type="Node2D" parent="."]
-position = Vector2( 80, 24 )
+[node name="ImportFrame" type="ConfirmationDialog" parent="CanvasLayer/Header"]
+visible = true
+margin_left = 220.0
+margin_top = 160.0
+margin_right = 420.0
+margin_bottom = 230.0
+rect_pivot_offset = Vector2( 102, 28 )
+window_title = "Import from frame...."
 
-[node name="Player" type="Sprite" parent="CurrentSprite"]
+[node name="Separator" type="HBoxContainer" parent="CanvasLayer/Header/ImportFrame"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 192.0
+margin_bottom = 34.0
+
+[node name="From" type="LineEdit" parent="CanvasLayer/Header/ImportFrame/Separator"]
+margin_right = 184.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Frame ID"
+
+[node name="CurrentSprite" type="Sprite" parent="."]
+position = Vector2( 80, 24 )
 texture = ExtResource( 7 )
 vframes = 7
 hframes = 12
 frame = 72
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite/Player"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CurrentSprite"]
 autoplay = "backdash"
-anims/backdash = SubResource( 4 )
-anims/fall = SubResource( 5 )
-anims/hurt = SubResource( 6 )
-anims/idle = SubResource( 7 )
-anims/jump = SubResource( 8 )
-anims/left_kick = SubResource( 9 )
-anims/left_punch = SubResource( 10 )
-anims/parry = SubResource( 11 )
-anims/right_kick = SubResource( 12 )
-anims/right_punch = SubResource( 13 )
-anims/taunt = SubResource( 14 )
-anims/walk = SubResource( 15 )
+anims/backdash = SubResource( 1 )
+anims/fall = SubResource( 2 )
+anims/hurt = SubResource( 3 )
+anims/idle = SubResource( 4 )
+anims/jump = SubResource( 5 )
+anims/left_kick = SubResource( 6 )
+anims/left_punch = SubResource( 7 )
+anims/parry = SubResource( 8 )
+anims/right_kick = SubResource( 9 )
+anims/right_punch = SubResource( 10 )
+anims/taunt = SubResource( 11 )
+anims/walk = SubResource( 12 )
 
 [node name="Cursor" type="ColorRect" parent="."]
 margin_right = 1.0

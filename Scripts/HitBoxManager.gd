@@ -6,6 +6,8 @@ export var hurtbox_color: Color
 onready var box_background_texture: Texture = preload("res://Sprites/hitbox-background.png")
 onready var selected_box_background_texture: Texture = preload("res://Sprites/hitbox-selected-background.png")
 
+onready var created_manually: bool = false
+
 var vertical_resizing: bool = false
 var horizontal_resizing: bool = false
 
@@ -49,21 +51,27 @@ func _ready():
 	$Right.connect("button_up", self, "_right_scaler_up")
 	$Down.connect("button_up", self, "_down_scaler_up")
 	
+	current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
 	
 	if hit_type == "hitbox":
 		$Guide.modulate = hitbox_color
 	else:
 		$Guide.modulate = hurtbox_color
 
+	# Focuses the created box (if created manually)
+	if not "LOADED" in name:
+		focus()
+	else:
+		update_selection(box_background_texture, 0.2, false)
+
 func _process(delta):
 	
-	if current_frame != get_tree().get_root().get_node("Canvas/CurrentSprite/Player/AnimationPlayer").current_animation_position * 10:
-		current_frame = get_tree().get_root().get_node("Canvas/CurrentSprite/Player/AnimationPlayer").current_animation_position * 10
+	if current_frame != int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10):
+		current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
 	
 	if is_hovered and Input.is_action_pressed("mouse_left"):
-		is_focused = true
-		update_selection(selected_box_background_texture, 0.5)
 		get_parent().move_child(self, get_parent().get_child_count() - 1)
+		focus()
 		
 		if not first_box_click:
 			offset_x = get_global_mouse_position().x - rect_global_position.x
@@ -71,25 +79,26 @@ func _process(delta):
 				
 			first_box_click = true
 			dragging_box = true
-		
-		for child in get_parent().get_children():
-			if child.name != name:
-				child.update_selection(box_background_texture, 0.2)
 	
 	if is_focused and Input.is_action_just_released("mouse_left"):
-		is_focused = false
 		dragging_box = false
 		first_box_click = false
-	
-	if not is_hovered and Input.is_action_just_pressed("mouse_left"):
-		is_focused = false
 	
 	if is_hovered and Input.is_action_just_pressed("mouse_right"):
 		change_hit_type()
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		handle_update(delta)
+
+func focus():
+	is_focused = true
+	update_selection(selected_box_background_texture, 0.5)
 	
+	for child in get_parent().get_children():
+			if child.name != name:
+				child.update_selection(box_background_texture, 0.2)
+				child.is_focused = false
+
 func handle_update(delta):
 	prev_mouse_pos = get_global_mouse_position()
 	
@@ -114,8 +123,10 @@ func handle_update(delta):
 	if horizontal_resizing:
 		update_collision_shape("horizontal")
 
-func update_selection(texture: Texture, alpha: float):
-	get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
+func update_selection(texture: Texture, alpha: float, save: bool = true):
+	if save:
+		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
+	
 	$Guide.texture = texture
 	$Guide.modulate.a = alpha
 		
@@ -137,10 +148,8 @@ func update_collision_shape(axis: String) -> void:
 	
 	if axis == "vertical":
 		obj_shape.extents.y = int(abs(get_global_mouse_position().y - $Collider.global_position.y))
-#		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
 	elif axis == "horizontal":
 		obj_shape.extents.x = abs(int(get_global_mouse_position().x) - $Collider.global_position.x)
-#		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
 
 func _up_scaler_down():
 	if not first_drag:
