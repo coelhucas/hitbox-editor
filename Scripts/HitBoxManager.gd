@@ -138,7 +138,7 @@ func change_hit_type() -> void:
 		$Guide.modulate = hitbox_color
 		hit_type = "hitbox"
 	
-	if not is_focused:
+	if is_focused:
 		update_selection(selected_box_background_texture, 0.5)
 	else:
 		update_selection(box_background_texture, 0.2)
