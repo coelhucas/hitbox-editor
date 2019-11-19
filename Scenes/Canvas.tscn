@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
@@ -7,7 +7,11 @@
 [ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=5]
 [ext_resource path="res://CustomInterfaces/Normal.tres" type="StyleBox" id=6]
 [ext_resource path="res://Scenes/Entities/Player.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=8]
+[ext_resource path="res://Scripts/Useless/MusicController.gd" type="Script" id=8]
+[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=9]
+[ext_resource path="res://Music/JoJo AMV - Kakyoins Theme - Noble Pope.ogg" type="AudioStream" id=10]
+[ext_resource path="res://Music/Josuke theme but its only the good part.ogg" type="AudioStream" id=11]
+[ext_resource path="res://Music/Jotaro Theme but only the Good Parts are in.ogg" type="AudioStream" id=12]
 
 [node name="Canvas" type="Node2D"]
 script = ExtResource( 1 )
@@ -190,16 +194,16 @@ margin_right = 1.0
 margin_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 8 )
-autoplay = true
-
 [node name="Boxes" type="Node2D" parent="."]
 position = Vector2( 80, 24 )
 z_index = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+script = ExtResource( 8 )
+musics = [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ) ]
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
-[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
+[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="item_selected" from="CanvasLayer/Header/Separator/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]

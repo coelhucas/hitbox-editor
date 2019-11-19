@@ -189,7 +189,7 @@ vframes = 7
 hframes = 12
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "idle"
+autoplay = "backdash"
 anims/backdash = SubResource( 1 )
 anims/fall = SubResource( 2 )
 anims/hurt = SubResource( 3 )

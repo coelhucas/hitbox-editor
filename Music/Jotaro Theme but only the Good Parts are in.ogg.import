@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Jotaro Theme but only the Good Parts are in.ogg-1666d7c37a4e2886a53c8033fc33ce43.oggstr"
+
+[deps]
+
+source_file="res://Music/Jotaro Theme but only the Good Parts are in.ogg"
+dest_files=[ "res://.import/Jotaro Theme but only the Good Parts are in.ogg-1666d7c37a4e2886a53c8033fc33ce43.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

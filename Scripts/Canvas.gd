@@ -42,12 +42,13 @@ func _process(delta):
 		mouse_update()
 		
 	prev_mouse_pos = get_global_mouse_position()
+	$Cursor.rect_position = get_global_mouse_position()
+	
 	if $CurrentSprite:
 		if $CurrentSprite/AnimationPlayer.is_playing() and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
 			display_updated_data()
 			prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
 			
-			$Cursor.rect_position = get_global_mouse_position()
 		
 			if old_animation_position != $CurrentSprite/AnimationPlayer.current_animation_position:
 				$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
@@ -80,7 +81,6 @@ func update_frame(next_position: float):
 	
 	if next_position > $CurrentSprite/AnimationPlayer.current_animation_length:
 		$CurrentSprite/AnimationPlayer.seek(0, true)
-		print("ba")
 	elif next_position < 0:
 		$CurrentSprite/AnimationPlayer.seek($CurrentSprite/AnimationPlayer.current_animation_length, true)
 	else:
@@ -104,7 +104,10 @@ func display_updated_data():
 				boxes.add_child(new_box)
 				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
 				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + sprite.global_position
-	
+		else:
+			return
+	else:
+		return
 	prev_boxes = boxes.get_children()
 	current_boxes = boxes.get_children()
 

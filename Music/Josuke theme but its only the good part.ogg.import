@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Josuke theme but its only the good part.ogg-1dd3bcb5c5705ec8e1622bc6327684d2.oggstr"
+
+[deps]
+
+source_file="res://Music/Josuke theme but its only the good part.ogg"
+dest_files=[ "res://.import/Josuke theme but its only the good part.ogg-1dd3bcb5c5705ec8e1622bc6327684d2.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
