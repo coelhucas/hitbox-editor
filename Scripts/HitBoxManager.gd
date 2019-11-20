@@ -2,6 +2,8 @@ extends Control
 
 export var hitbox_color: Color
 export var hurtbox_color: Color
+export var taunt_color: Color
+export var parry_color: Color
 
 onready var box_background_texture: Texture = preload("res://Sprites/hitbox-background.png")
 onready var selected_box_background_texture: Texture = preload("res://Sprites/hitbox-selected-background.png")
@@ -14,6 +16,7 @@ var horizontal_resizing: bool = false
 var first_drag: bool = false
 var start_position: Vector2
 var prev_mouse_pos: Vector2
+var prev_collider_extents: Vector2
 
 var first_box_click: bool = false
 
@@ -24,7 +27,11 @@ var is_hovered: bool = false
 var is_focused: bool = false
 var dragging_box: bool = false
 
+var knockback: int = 0
+var juggle: int = 0
+
 var current_frame: float
+var sprite = null
 
 var hit_type: String = "hitbox"
 
@@ -53,10 +60,9 @@ func _ready():
 	
 	current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
 	
-	if hit_type == "hitbox":
-		$Guide.modulate = hitbox_color
-	else:
-		$Guide.modulate = hurtbox_color
+	use_custom_type(hit_type)
+	
+	sprite = get_node("/root/Canvas/CurrentSprite")
 
 	# Focuses the created box (if created manually)
 	if not "LOADED" in name:
@@ -65,6 +71,10 @@ func _ready():
 		update_selection(box_background_texture, 0.2, false)
 
 func _process(delta):
+	
+	if not is_instance_valid(sprite):
+		sprite = get_node("/root/Canvas/CurrentSprite")
+		print(sprite)
 	
 	if current_frame != int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10):
 		current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
@@ -89,10 +99,25 @@ func _process(delta):
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		handle_update(delta)
+	
+	if $Collider.shape.extents != prev_collider_extents:
+		$Guide.rect_global_position.x = int($Collider.global_position.x) - $Collider.shape.extents.x
+		$Guide.rect_global_position.y = int($Collider.global_position.y) - $Collider.shape.extents.y
+		$Guide.rect_size.y = int(abs($Collider.shape.extents.y) * 2)
+		$Guide.rect_size.x = int(abs($Collider.shape.extents.x) * 2)
+		
+		$Up.rect_position = Vector2(-0.5, $Collider.position.y - int(abs($Collider.shape.extents.y) + 1))
+		$Down.rect_position = Vector2(-0.5, $Collider.position.y + int(abs($Collider.shape.extents.y) - 1))
+		
+		$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x) + 1), -0.5)
+		$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x) - 1), -0.5)
 
+	prev_collider_extents = $Collider.shape.extents
+	
 func focus():
 	is_focused = true
 	update_selection(selected_box_background_texture, 0.5)
+	Utils.update_selected_box(name, rect_global_position - sprite.global_position, $Collider.shape.extents, hit_type, juggle, knockback)
 	
 	for child in get_parent().get_children():
 			if child.name != name:
@@ -101,17 +126,6 @@ func focus():
 
 func handle_update(delta):
 	prev_mouse_pos = get_global_mouse_position()
-	
-	$Guide.rect_global_position.x = int($Collider.global_position.x) - $Collider.shape.extents.x
-	$Guide.rect_global_position.y = int($Collider.global_position.y) - $Collider.shape.extents.y
-	$Guide.rect_size.y = int(abs($Collider.shape.extents.y) * 2)
-	$Guide.rect_size.x = int(abs($Collider.shape.extents.x) * 2)
-	
-	$Up.rect_position = Vector2(-0.5, $Collider.position.y - int(abs($Collider.shape.extents.y) + 1))
-	$Down.rect_position = Vector2(-0.5, $Collider.position.y + int(abs($Collider.shape.extents.y) - 1))
-	
-	$Left.rect_position = Vector2($Collider.position.x - int(abs($Collider.shape.extents.x) + 1), -0.5)
-	$Right.rect_position = Vector2($Collider.position.x + int(abs($Collider.shape.extents.x) - 1), -0.5)
 	
 		
 	if dragging_box:
@@ -127,6 +141,9 @@ func update_selection(texture: Texture, alpha: float, save: bool = true):
 	if save:
 		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
 	
+	if is_focused:
+		Utils.update_selected_box_type(hit_type)
+	
 	$Guide.texture = texture
 	$Guide.modulate.a = alpha
 		
@@ -134,22 +151,46 @@ func change_hit_type() -> void:
 	if hit_type == "hitbox":
 		$Guide.modulate = hurtbox_color
 		hit_type = "hurtbox"
-	else:
+	elif hit_type == "hurtbox":
 		$Guide.modulate = hitbox_color
 		hit_type = "hitbox"
+	else:
+		hit_type == "hitbox"
 	
 	if is_focused:
 		update_selection(selected_box_background_texture, 0.5)
 	else:
 		update_selection(box_background_texture, 0.2)
+
+func use_custom_type(which: String) -> void:
+	hit_type = which
+	match which:
+		"hitbox":
+			$Guide.modulate = hitbox_color
+		"hurtbox":
+			$Guide.modulate = hurtbox_color
+		"taunt":
+			$Guide.modulate = taunt_color
+		"parry":
+			$Guide.modulate = parry_color
 	
+	if is_focused:
+		update_selection(selected_box_background_texture, 0.5)
+	else:
+		update_selection(box_background_texture, 0.2)
+
 func update_collision_shape(axis: String) -> void:
+	if not is_focused:
+		focus()
+		
 	var obj_shape: ConvexPolygonShape2D = $Collider.shape
 	
 	if axis == "vertical":
 		obj_shape.extents.y = int(abs(get_global_mouse_position().y - $Collider.global_position.y))
 	elif axis == "horizontal":
 		obj_shape.extents.x = abs(int(get_global_mouse_position().x) - $Collider.global_position.x)
+	
+	Utils.update_selected_box(name, rect_global_position - sprite.global_position, $Collider.shape.extents, hit_type, juggle, knockback)
 
 func _up_scaler_down():
 	if not first_drag:

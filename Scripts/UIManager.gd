@@ -13,6 +13,8 @@ var h_boxes
 var sprite
 
 func _ready():
+	$Inspector.visible = true
+	
 	$Header/SaveFile.add_filter("*.JSON ; JSON Files")
 	$Header/SaveFile.connect("confirmed", self, "_save_at_dir")
 	$Header/OpenFile.add_filter("*.JSON ; JSON Files")
@@ -22,15 +24,22 @@ func _ready():
 	file_popup.connect("id_pressed", self, "_file_option_selected")
 	file_popup.add_item("Open (CTRL+O)")
 	file_popup.add_item("Save (CTRL+S)")
+	file_popup.add_item("Open Inspector (I)")
 	
 	var box_popup = $Header/Separator/Box.get_popup()
 	box_popup.connect("id_pressed", self, "_box_option_selected")
 	box_popup.add_item("New (A)")
 	box_popup.add_item("Delete selected (Z)")
-	box_popup.add_item("Import from another frame (I)")
+	box_popup.add_item("Import from another frame (CTRL+I)")
+	
 	
 	$Header/ImportFrame.connect("confirmed", self, "_import_frame_data")
 	$Header/ImportFrame.register_text_enter($Header/ImportFrame/Separator/From)
+	
+	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("HITBOX")
+	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("HURTBOX")
+	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("PARRY")
+	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("TAUNT")
 	
 	$Header/Separator/SpriteSelector.connect("item_selected", self, "_change_sprite")
 	load_animated_entities()	
@@ -72,6 +81,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("open_file"):
 		$Header/OpenFile.visible = true
 		$Header/OpenFile.invalidate()
+	
+	if Input.is_action_just_pressed("open_inspector"):
+		_open_inspector()
 		
 
 func load_animated_entities():
@@ -123,6 +135,8 @@ func save_data(current_frame: int):
 	for box in h_boxes.get_children():
 		var collider: CollisionShape2D = box.get_node("Collider")
 		var type = box.hit_type
+		var knockback = int(box.knockback)
+		var juggle = int(box.juggle)
 		var pos = collider.global_position - sprite.global_position
 		var dimensions: Dictionary = {
 			"x": collider.shape.extents.x,
@@ -130,6 +144,8 @@ func save_data(current_frame: int):
 		}
 		boxes_array.append({
 			"type": type,
+			"juggle": juggle,
+			"knockback": knockback,
 			"position": {
 				"x": pos.x,
 				"y": pos.y,
@@ -155,6 +171,7 @@ func _file_option_selected(ID: int):
 			$Header/SaveFile.invalidate()
 			if $Header/OpenFile.visible:
 				$Header/OpenFile.visible = false
+		2: _open_inspector()
 				
 func _box_option_selected(ID: int):
 	match ID:
@@ -178,6 +195,9 @@ func _open_file(dir: String):
 	Utils.boxes_data = parse_json(file.get_as_text())
 	get_parent().display_updated_data()
 	file.close()
+
+func _open_inspector():
+	$Inspector.visible = true
 
 func _on_AnimationSelector_item_selected(ID):
 	animation_player = get_parent().get_node("CurrentSprite/AnimationPlayer")
@@ -215,6 +235,10 @@ func _delete_selected_box():
 	var prev_box_id = boxes_parent.get_child_count() - 1
 	if prev_box_id != -1:
 		boxes_parent.get_child(prev_box_id).focus()
+	
+	# If it was the last box, clears inspector
+	if boxes_parent.get_child_count() == 0:
+		Utils.clear_selected_box()
 	
 	# Save updated data
 	save_data(int(animation_player.current_animation_position * 10))

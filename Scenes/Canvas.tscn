@@ -52,6 +52,7 @@ size_flags_vertical = 3
 script = ExtResource( 3 )
 
 [node name="Header" type="Panel" parent="CanvasLayer"]
+editor/display_folded = true
 margin_right = 1280.0
 margin_bottom = 28.0
 grow_horizontal = 0
@@ -76,14 +77,14 @@ text = "File"
 
 [node name="Box" type="MenuButton" parent="CanvasLayer/Header/Separator"]
 margin_left = 72.0
-margin_right = 108.0
+margin_right = 117.0
 margin_bottom = 28.0
 custom_fonts/font = ExtResource( 4 )
 text = "Box"
 
 [node name="SpriteSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 124.0
-margin_right = 281.0
+margin_left = 133.0
+margin_right = 290.0
 margin_bottom = 28.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 5 )
@@ -94,8 +95,8 @@ enabled_focus_mode = 1
 text = "Select Sprite"
 
 [node name="AnimationSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
-margin_left = 297.0
-margin_right = 487.0
+margin_left = 306.0
+margin_right = 496.0
 margin_bottom = 28.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 5 )
@@ -106,8 +107,8 @@ enabled_focus_mode = 1
 text = "Select Animation"
 
 [node name="PlayBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 503.0
-margin_right = 547.0
+margin_left = 512.0
+margin_right = 556.0
 margin_bottom = 28.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 5 )
@@ -118,8 +119,8 @@ enabled_focus_mode = 1
 text = "Play"
 
 [node name="StopBtn" type="Button" parent="CanvasLayer/Header/Separator"]
-margin_left = 563.0
-margin_right = 607.0
+margin_left = 572.0
+margin_right = 616.0
 margin_bottom = 28.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 5 )
@@ -143,9 +144,9 @@ enabled_focus_mode = 1
 text = "<"
 
 [node name="CurrentFrameLabel" type="Label" parent="CanvasLayer/Header/Separator"]
-margin_left = 623.0
+margin_left = 632.0
 margin_top = 3.0
-margin_right = 711.0
+margin_right = 720.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 4 )
 text = "Frame: 0"
@@ -193,8 +194,8 @@ window_title = "Import from frame...."
 [node name="Separator" type="HBoxContainer" parent="CanvasLayer/Header/ImportFrame"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 192.0
-margin_bottom = 34.0
+margin_right = 271.0
+margin_bottom = 40.0
 
 [node name="From" type="LineEdit" parent="CanvasLayer/Header/ImportFrame/Separator"]
 margin_right = 184.0
@@ -202,6 +203,160 @@ margin_bottom = 26.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Frame ID"
+
+[node name="Inspector" type="WindowDialog" parent="CanvasLayer"]
+visible = true
+margin_left = 1052.0
+margin_top = 171.0
+margin_right = 1243.0
+margin_bottom = 683.0
+window_title = "Inspector"
+
+[node name="Container" type="CenterContainer" parent="CanvasLayer/Inspector"]
+margin_left = 15.0
+margin_top = 6.0
+margin_right = 147.0
+margin_bottom = 154.0
+
+[node name="VerticalSeparator" type="VBoxContainer" parent="CanvasLayer/Inspector/Container"]
+margin_right = 157.0
+margin_bottom = 488.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 12
+alignment = 1
+
+[node name="Name" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_right = 157.0
+margin_bottom = 22.0
+rect_pivot_offset = Vector2( 27, 7 )
+text = "UNSELECTED"
+align = 1
+
+[node name="TypeContainer" type="VBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 34.0
+margin_right = 157.0
+margin_bottom = 88.0
+rect_min_size = Vector2( 140, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator/TypeContainer"]
+margin_right = 157.0
+margin_bottom = 22.0
+text = "Type"
+
+[node name="Type" type="OptionButton" parent="CanvasLayer/Inspector/Container/VerticalSeparator/TypeContainer"]
+margin_top = 26.0
+margin_right = 157.0
+margin_bottom = 54.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "HITBOX"
+
+[node name="Rectangle" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 100.0
+margin_right = 157.0
+margin_bottom = 122.0
+text = "Rectangle"
+
+[node name="XAxisContainer" type="HBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 134.0
+margin_right = 157.0
+margin_bottom = 166.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator/XAxisContainer"]
+margin_top = 5.0
+margin_right = 11.0
+margin_bottom = 27.0
+text = "X"
+
+[node name="Value" type="LineEdit" parent="CanvasLayer/Inspector/Container/VerticalSeparator/XAxisContainer"]
+margin_left = 15.0
+margin_right = 157.0
+margin_bottom = 32.0
+max_length = 3
+
+[node name="YAxisContainer" type="HBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 178.0
+margin_right = 157.0
+margin_bottom = 210.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator/YAxisContainer"]
+margin_top = 5.0
+margin_right = 11.0
+margin_bottom = 27.0
+text = "Y"
+
+[node name="Value" type="LineEdit" parent="CanvasLayer/Inspector/Container/VerticalSeparator/YAxisContainer"]
+margin_left = 15.0
+margin_right = 157.0
+margin_bottom = 32.0
+max_length = 3
+
+[node name="Extents" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 222.0
+margin_right = 157.0
+margin_bottom = 244.0
+text = "Extents"
+
+[node name="XExtentsContainer" type="HBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 256.0
+margin_right = 157.0
+margin_bottom = 288.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator/XExtentsContainer"]
+margin_top = 5.0
+margin_right = 11.0
+margin_bottom = 27.0
+text = "X"
+
+[node name="Value" type="LineEdit" parent="CanvasLayer/Inspector/Container/VerticalSeparator/XExtentsContainer"]
+margin_left = 15.0
+margin_right = 157.0
+margin_bottom = 32.0
+max_length = 2
+
+[node name="YExtentsContainer" type="HBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 300.0
+margin_right = 157.0
+margin_bottom = 332.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator/YExtentsContainer"]
+margin_top = 5.0
+margin_right = 11.0
+margin_bottom = 27.0
+text = "Y"
+
+[node name="Value" type="LineEdit" parent="CanvasLayer/Inspector/Container/VerticalSeparator/YExtentsContainer"]
+margin_left = 15.0
+margin_right = 157.0
+margin_bottom = 32.0
+max_length = 2
+
+[node name="Juggle" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 344.0
+margin_right = 157.0
+margin_bottom = 366.0
+text = "Juggle"
+
+[node name="JuggleValue" type="LineEdit" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 378.0
+margin_right = 157.0
+margin_bottom = 410.0
+placeholder_text = "Value"
+
+[node name="Knockback" type="Label" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 422.0
+margin_right = 157.0
+margin_bottom = 444.0
+text = "Knockback"
+
+[node name="KnockbackValue" type="LineEdit" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+margin_top = 456.0
+margin_right = 157.0
+margin_bottom = 488.0
+placeholder_text = "Value"
 
 [node name="CurrentSprite" parent="." instance=ExtResource( 8 )]
 

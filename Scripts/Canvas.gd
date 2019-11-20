@@ -75,6 +75,7 @@ func mouse_update():
 		pass
 
 func update_frame(next_position: float):
+	Utils.clear_selected_box()
 	$CanvasLayer.save_data($CurrentSprite/AnimationPlayer.current_animation_position * 10)
 	
 	for box in $Boxes.get_children():
@@ -101,6 +102,8 @@ func display_updated_data():
 				var new_box = box_scene.instance()
 				var new_box_collider = new_box.get_node("Collider")
 				new_box.hit_type = box.type
+				new_box.knockback = box.knockback
+				new_box.juggle = box.juggle
 				new_box.name = "LOADED-HBOX" + str(boxes.get_child_count())
 				boxes.add_child(new_box)
 				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
