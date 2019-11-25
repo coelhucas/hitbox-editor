@@ -187,9 +187,11 @@ tracks/0/keys = {
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 12
+frame = 25
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "backdash"
+playback_speed = 0.0
 anims/backdash = SubResource( 1 )
 anims/fall = SubResource( 2 )
 anims/hurt = SubResource( 3 )

@@ -3,6 +3,7 @@ extends CanvasItem
 onready var animation_player: AnimationPlayer = $CurrentSprite/AnimationPlayer
 onready var box_scene: PackedScene = preload("res://Scenes/HitBox.tscn")
 
+const ANIMATION_SPEED: float = 0.08
 const GRID_LINE_SIZE: int = 160
 export var GRID_COLOR: Color
 export var BACKGROUND_COLOR: Color
@@ -34,10 +35,18 @@ func _ready():
 	boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	current_boxes = boxes.get_children()
 	get_tree().get_root().connect("size_changed", self, "_on_screen_resized")
+	$ContinueAnimation.wait_time = ANIMATION_SPEED
+	$ContinueAnimation.connect("timeout", self, "_continue_animation_timeout")
 	
 	sprite.global_position = $MiddlePoint.global_position
 
 func _process(delta):
+	
+	if Utils.is_playing and $ContinueAnimation.is_stopped():
+		$ContinueAnimation.start()
+	elif not Utils.is_playing and not $ContinueAnimation.is_stopped():
+		$ContinueAnimation.stop()
+		Utils.create_stored_boxes()
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		mouse_update()
@@ -46,8 +55,8 @@ func _process(delta):
 	$Cursor.rect_position = get_global_mouse_position()
 	
 	if $CurrentSprite:
-		if $CurrentSprite/AnimationPlayer.is_playing() and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
-			display_updated_data()
+		if Utils.is_playing and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
+			Utils.create_stored_boxes()
 			prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
 			
 		
@@ -56,10 +65,10 @@ func _process(delta):
 				old_animation_position = $CurrentSprite/AnimationPlayer.current_animation_position		
 				
 		if Input.is_action_just_pressed("ui_right"):
-			update_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
+			Utils.seek_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
 				
 		elif Input.is_action_just_pressed("ui_left"):
-			update_frame($CurrentSprite/AnimationPlayer.current_animation_position - 0.1)
+			Utils.seek_frame($CurrentSprite/AnimationPlayer.current_animation_position - 0.1)
 			
 	if Input.is_action_pressed("mouse_middle") and first_camera_drag:
 		camera_offset = get_global_mouse_position() - $Camera2D.global_position
@@ -73,47 +82,6 @@ func _process(delta):
 func mouse_update():
 	if not first_camera_drag:
 		pass
-
-func update_frame(next_position: float):
-	Utils.clear_selected_box()
-	$CanvasLayer.save_data($CurrentSprite/AnimationPlayer.current_animation_position * 10)
-	
-	for box in $Boxes.get_children():
-		box.is_focused = false
-	
-	if next_position > $CurrentSprite/AnimationPlayer.current_animation_length:
-		$CurrentSprite/AnimationPlayer.seek(0, true)
-	elif next_position < 0:
-		$CurrentSprite/AnimationPlayer.seek($CurrentSprite/AnimationPlayer.current_animation_length, true)
-	else:
-		$CurrentSprite/AnimationPlayer.seek(next_position, true)
-	
-	$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
-	display_updated_data()
-	
-func display_updated_data():
-	for box in boxes.get_children():
-		box.queue_free()
-	
-	if Utils.boxes_data.has($CurrentSprite/AnimationPlayer.assigned_animation):
-		if Utils.boxes_data[$CurrentSprite/AnimationPlayer.assigned_animation].has(str(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))):
-			var current_frame_data = Utils.boxes_data[$CurrentSprite/AnimationPlayer.assigned_animation][str(int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)))]
-			for box in current_frame_data:
-				var new_box = box_scene.instance()
-				var new_box_collider = new_box.get_node("Collider")
-				new_box.hit_type = box.type
-				new_box.knockback = box.knockback
-				new_box.juggle = box.juggle
-				new_box.name = "LOADED-HBOX" + str(boxes.get_child_count())
-				boxes.add_child(new_box)
-				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
-				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + sprite.global_position
-		else:
-			return
-	else:
-		return
-	prev_boxes = boxes.get_children()
-	current_boxes = boxes.get_children()
 
 func _input(e):
 	if (e is InputEventMouseButton and not $CanvasLayer/Header/SaveFile.visible) and not $CanvasLayer/Header/OpenFile.visible:
@@ -139,7 +107,6 @@ func zoom_out():
 		$ZoomDelay.start()
 		$Camera2D.global_position = get_global_mouse_position()
 		$Camera2D.zoom = $Camera2D.zoom * ZOOM_AMOUNT
-		print(1/$Camera2D.zoom.x)
 
 func _draw():
 	if not grid_ready:
@@ -159,9 +126,10 @@ func _on_ZoomDelay_timeout():
 
 
 func _on_screen_resized():
-	print("resized")
 	grid_ready = false
 
+func _continue_animation_timeout():
+	if not Utils.is_playing:
+		return
 
-func _on_Area2D_body_entered(body):
-	print("PINTO")
+	Utils.seek_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)

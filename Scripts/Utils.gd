@@ -1,5 +1,13 @@
 extends Node
 
+onready var box_scene: PackedScene = preload("res://Scenes/HitBox.tscn")
+onready var sprite = get_node("/root/Canvas/CurrentSprite")
+
+onready var inspector = get_node("/root/Canvas/CanvasLayer/Inspector")
+onready	var animation_player: AnimationPlayer = get_node("/root/Canvas/CurrentSprite/AnimationPlayer")
+onready	var collision_boxes = get_node("/root/Canvas/Boxes")
+
+
 const BOX_TYPES: Dictionary = {
 	0: "hitbox",
 	1: "hurtbox",
@@ -18,9 +26,8 @@ var boxes_data: Dictionary = {}
 var selected_box: Dictionary = {}
 var old_selection_data: Dictionary = {}
 
-onready var sprite = get_node("/root/Canvas/CurrentSprite")
+var is_playing: bool = false
 
-onready var inspector = get_node("/root/Canvas/CanvasLayer/Inspector")
 
 func _ready():
 	var type_selector = inspector.get_node("Container/VerticalSeparator/TypeContainer/Type")
@@ -94,21 +101,115 @@ func _update_inspector():
 	
 	old_selection_data = selected_box
 
+func save_data(current_frame: int):
+	var sprite = get_node("/root/Canvas/CurrentSprite")
+	animation_player = sprite.get_node("AnimationPlayer")
+	
+	if Utils.is_playing:
+		return
+	
+	if not is_instance_valid(sprite):
+		sprite = get_node("/root/Canvas/CurrentSprite")
+		animation_player = sprite.get_node("AnimationPlayer")
+	
+	var boxes_array: Array = []
+	for box in collision_boxes.get_children():
+		if "ANIMATED" in box.name:
+			box.queue_free()
+			continue
+			
+		var collider: CollisionShape2D = box.get_node("Collider")
+		var type = box.hit_type
+		var knockback = int(box.knockback)
+		var juggle = int(box.juggle)
+		var pos = collider.global_position - sprite.global_position
+		var dimensions: Dictionary = {
+			"x": collider.shape.extents.x,
+			"y": collider.shape.extents.y
+		}
+		boxes_array.append({
+			"type": type,
+			"juggle": juggle,
+			"knockback": knockback,
+			"position": {
+				"x": pos.x,
+				"y": pos.y,
+			},
+			"dimensions": dimensions
+		})
+	if Utils.boxes_data.has(animation_player.assigned_animation):
+		boxes_data[animation_player.assigned_animation][str(current_frame)] = boxes_array
+	else:
+		Utils.boxes_data[animation_player.assigned_animation] = {
+			str(current_frame): boxes_array	
+		}
+
+func clear_current_boxes():
+	for child in collision_boxes.get_children():
+		child.free()
+
+func seek_frame(frame: float):
+	save_data(int(animation_player.current_animation_position * 10))
+	
+	if frame > animation_player.current_animation_length:
+		animation_player.seek(0, true)
+	elif frame < 0:
+		animation_player.seek(animation_player.current_animation_length, true)
+	else:
+		animation_player.seek(frame, true)
+	
+	get_node("/root/Canvas/CanvasLayer/Header/Separator/CurrentFrameLabel").text = "Frame: " + str(int(animation_player.current_animation_position * 10))
+	
+	create_stored_boxes()
+
+func create_stored_boxes():
+	clear_current_boxes()
+	var animation_player = get_node("/root/Canvas/CurrentSprite/AnimationPlayer")
+	var current_frame = str(int(animation_player.current_animation_position * 10))
+	
+	if boxes_data.has(animation_player.assigned_animation):
+		if boxes_data[animation_player.assigned_animation].has(current_frame):
+			var current_frame_data = boxes_data[animation_player.assigned_animation][current_frame]
+			
+			for box in current_frame_data:
+				var new_box = box_scene.instance()
+				var new_box_collider = new_box.get_node("Collider")
+				new_box.hit_type = box.type
+				new_box.knockback = box.knockback
+				new_box.juggle = box.juggle
+				collision_boxes.add_child(new_box)
+				if is_playing:
+					new_box.name = "ANIMATED-HBOX" + str(collision_boxes.get_child_count())
+				else:
+					new_box.name = "LOADED-HBOX" + str(collision_boxes.get_child_count())
+				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
+				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + sprite.global_position
+			
+	if collision_boxes.get_children().size() > 0:
+		var children = collision_boxes.get_children()
+		children[children.size() - 1].focus()
+
+# Saved after update inside Hitbox
 func _update_box_type(ID: int):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.use_custom_type(BOX_TYPES[ID])
 
+# Saved here for now
 func _update_hitbox_knockback(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.knockback = int(new_value)
+		save_data(int(get_node("/root/Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10))
 
+# Saved here for now
 func _update_hitbox_juggle(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.juggle = int(new_value)
+		save_data(int(get_node("/root/Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10))
 
+# Below properties need to be saved manually here
 func _update_box_position_x(new_value: String):
 	if not is_instance_valid(sprite):
 		sprite = get_node("/root/Canvas/CurrentSprite")
@@ -116,6 +217,7 @@ func _update_box_position_x(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.rect_global_position.x = int(new_value) + int(sprite.global_position.x)
+		save_data(int(get_node("/root/Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10))
 			
 func _update_box_position_y(new_value: String):
 	if not is_instance_valid(sprite):
@@ -124,14 +226,16 @@ func _update_box_position_y(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.rect_global_position.y = int(new_value) + int(sprite.global_position.y)
+		save_data(int(get_node("/root/Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10))
 			
 func _update_box_extents_x(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
-		print(int(new_value if new_value != "0" else 1))
 		box.get_node("Collider").shape.extents.x = int(new_value)
+		save_data(int(get_node("/root/Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10))
 		
 func _update_box_extents_y(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.get_node("Collider").shape.extents.y = int(new_value if new_value != "0" else 1)
+		save_data(int(get_node("/root/Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10))

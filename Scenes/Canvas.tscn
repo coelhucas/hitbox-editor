@@ -39,6 +39,8 @@ position = Vector2( 80, 24 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource( 2 )
+default_frame_color = Color( 1, 1, 1, 1 )
+playing_frame_color = Color( 1, 0.819608, 0, 1 )
 
 [node name="Grid" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
@@ -371,9 +373,11 @@ z_index = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 volume_db = -80.0
-autoplay = true
 script = ExtResource( 9 )
 musics = [ ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ]
+
+[node name="ContinueAnimation" type="Timer" parent="."]
+wait_time = 0.02
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
 [connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]

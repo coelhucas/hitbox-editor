@@ -2,6 +2,9 @@ extends CanvasLayer
 
 onready var box: PackedScene = preload("res://Scenes/HitBox.tscn")
 
+export var default_frame_color: Color
+export var playing_frame_color: Color
+
 const ANIMATED_SCENES_PATH: String = "res://Scenes/Entities/"
 
 var animation_player: AnimationPlayer
@@ -54,6 +57,11 @@ func _process(delta):
 			$Header/Separator/AnimationSelector.add_item(animation)
 		
 		loaded_animations = true
+	
+	if Utils.is_playing and $Header/Separator/CurrentFrameLabel.modulate != playing_frame_color:
+		$Header/Separator/CurrentFrameLabel.modulate = playing_frame_color
+	elif not Utils.is_playing and $Header/Separator/CurrentFrameLabel.modulate != default_frame_color:
+		$Header/Separator/CurrentFrameLabel.modulate = default_frame_color
 		
 	# Application shortcuts
 	# Box
@@ -67,11 +75,11 @@ func _process(delta):
 		_open_import_popup()
 		
 	# Animation
-	if Input.is_action_just_pressed("stop_animation"):
-		animation_player.stop()
+	if Input.is_action_just_pressed("stop_animation") and Utils.is_playing:
+		Utils.is_playing = false
 	
 	if Input.is_action_just_pressed("play_animation"):
-		animation_player.play()
+		Utils.is_playing = true
 	
 	# File
 	if Input.is_action_just_pressed("save_file"):
@@ -126,38 +134,6 @@ func _update_sprite_selector():
 		$Header/Separator/AnimationSelector.add_item(animation)
 	$Header/Separator/AnimationSelector.select(0)
 	pass
-	
-func save_data(current_frame: int):
-	if not is_instance_valid(sprite):
-		sprite = get_parent().get_node("CurrentSprite")
-	
-	var boxes_array: Array = []
-	for box in h_boxes.get_children():
-		var collider: CollisionShape2D = box.get_node("Collider")
-		var type = box.hit_type
-		var knockback = int(box.knockback)
-		var juggle = int(box.juggle)
-		var pos = collider.global_position - sprite.global_position
-		var dimensions: Dictionary = {
-			"x": collider.shape.extents.x,
-			"y": collider.shape.extents.y
-		}
-		boxes_array.append({
-			"type": type,
-			"juggle": juggle,
-			"knockback": knockback,
-			"position": {
-				"x": pos.x,
-				"y": pos.y,
-			},
-			"dimensions": dimensions
-		})
-	if	Utils.boxes_data.has(animation_player.assigned_animation):
-		Utils.boxes_data[animation_player.assigned_animation][str(current_frame)] = boxes_array
-	else:
-		Utils.boxes_data[animation_player.assigned_animation] = {
-			str(current_frame): boxes_array	
-		}
 		
 func _file_option_selected(ID: int):
 	match ID:
@@ -202,19 +178,18 @@ func _open_inspector():
 func _on_AnimationSelector_item_selected(ID):
 	animation_player = get_parent().get_node("CurrentSprite/AnimationPlayer")
 
-	animation_player.stop()
+	Utils.is_playing = false
 	animation_player.current_animation = animation_player.get_animation_list()[ID]
-	animation_player.play()
+	Utils.is_playing = true
 
 
 func _on_PlayBtn_pressed():
-	animation_player.play()
+	Utils.is_playing = true
 
 
 func _on_StopBtn_pressed():
-	animation_player.stop(false)
+	Utils.is_playing = false
 	animation_player.seek(stepify(animation_player.current_animation_position, 0.1))
-	print(stepify(animation_player.current_animation_position, 0.1))
 
 func _create_box():
 	var box_instance = box.instance()
@@ -241,7 +216,7 @@ func _delete_selected_box():
 		Utils.clear_selected_box()
 	
 	# Save updated data
-	save_data(int(animation_player.current_animation_position * 10))
+	Utils.save_data(int(animation_player.current_animation_position * 10))
 
 func _open_import_popup():
 	$Header/ImportFrame.popup()
@@ -265,4 +240,4 @@ func _import_frame_data() -> void:
 				new_box_collider.shape.extents = Vector2(box_data.dimensions.x, box_data.dimensions.y)
 				new_box.rect_global_position = Vector2(box_data.position.x, box_data.position.y) + sprite.global_position
 		else:
-			print("No tengo")
+			pass

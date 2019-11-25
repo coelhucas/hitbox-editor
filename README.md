@@ -1,6 +1,6 @@
 ![](https://github.com/coelhucas/hitbox-editor/blob/master/Screenshots/Screen%20Shot%202019-11-25%20at%2012.53.29.png?raw=true)
 
-# Hitbox Editor v0.0.0
+# Hitbox Editor v0.0.1
 
 ## Description
 

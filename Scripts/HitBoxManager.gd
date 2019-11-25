@@ -60,7 +60,7 @@ func _ready():
 	
 	current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
 	
-	use_custom_type(hit_type)
+	use_custom_type(hit_type, false)
 	
 	sprite = get_node("/root/Canvas/CurrentSprite")
 
@@ -74,7 +74,6 @@ func _process(delta):
 	
 	if not is_instance_valid(sprite):
 		sprite = get_node("/root/Canvas/CurrentSprite")
-		print(sprite)
 	
 	if current_frame != int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10):
 		current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
@@ -121,13 +120,12 @@ func focus():
 	
 	for child in get_parent().get_children():
 			if child.name != name:
-				child.update_selection(box_background_texture, 0.2)
+				child.update_selection(box_background_texture, 0.2, false)
 				child.is_focused = false
 
 func handle_update(delta):
 	prev_mouse_pos = get_global_mouse_position()
 	
-		
 	if dragging_box:
 		rect_global_position = Vector2(int(get_global_mouse_position().x - offset_x), int(get_global_mouse_position().y - offset_y))
 	
@@ -139,7 +137,7 @@ func handle_update(delta):
 
 func update_selection(texture: Texture, alpha: float, save: bool = true):
 	if save:
-		get_tree().get_root().get_node("Canvas/CanvasLayer").save_data(current_frame)
+		Utils.save_data(current_frame)
 	
 	if is_focused:
 		Utils.update_selected_box_type(hit_type)
@@ -162,7 +160,7 @@ func change_hit_type() -> void:
 	else:
 		update_selection(box_background_texture, 0.2)
 
-func use_custom_type(which: String) -> void:
+func use_custom_type(which: String, save: bool = true) -> void:
 	hit_type = which
 	match which:
 		"hitbox":
@@ -175,9 +173,9 @@ func use_custom_type(which: String) -> void:
 			$Guide.modulate = parry_color
 	
 	if is_focused:
-		update_selection(selected_box_background_texture, 0.5)
+		update_selection(selected_box_background_texture, 0.5, save)
 	else:
-		update_selection(box_background_texture, 0.2)
+		update_selection(box_background_texture, 0.2, save)
 
 func update_collision_shape(axis: String) -> void:
 	if not is_focused:
@@ -202,6 +200,7 @@ func _up_scaler_down():
 func _up_scaler_up():
 	vertical_resizing = false
 	first_drag = false
+	Utils.save_data(current_frame)
 
 
 func _down_scaler_down():
@@ -213,18 +212,21 @@ func _down_scaler_down():
 
 func _down_scaler_up():
 	vertical_resizing = false
+	Utils.save_data(current_frame)
 
 func _left_scaler_down():
 	horizontal_resizing = true
 
 func _left_scaler_up():
 	horizontal_resizing = false
+	Utils.save_data(current_frame)
 
 func _right_scaler_down():
 	horizontal_resizing = true
 
 func _right_scaler_up():
 	horizontal_resizing = false
+	Utils.save_data(current_frame)
 
 func _drag_area_mouse_entered():
 	is_hovered = true
