@@ -8,7 +8,7 @@ This project was started as a tool for a game I'm making with a friend, which ne
 
 It work with animated `Scenes` from the [TSCN format](https://docs.godotengine.org/en/3.1/development/file_formats/tscn.html). [1]
 
-[1] At the moment you can't use your own TSCN files. It's a upcoming feature.
+[1] At the moment you can't use your own TSCN files. It's a upcoming v1 feature.
 
 ## Features
 ### Done
@@ -22,6 +22,9 @@ It work with animated `Scenes` from the [TSCN format](https://docs.godotengine.o
 ### Upcoming
 - [ ] Load external `.TSCN` files
 - [ ] Add/remove custom inspector variables to be saved and loaded with the json output
+
+### Known bugs
+- [ ] NinePatch can't be resized to 1x rectangle extents (make an offset with wrong displaying position and align)
 
 ## Setup
 
