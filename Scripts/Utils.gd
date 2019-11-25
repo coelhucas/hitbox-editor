@@ -71,6 +71,7 @@ func clear_selected_box():
 	fields_enable(false)
 	
 func fields_enable(value: bool):
+	inspector.get_node("Container/VerticalSeparator/TypeContainer/Type").disabled = !value
 	inspector.get_node("Container/VerticalSeparator/XAxisContainer/Value").editable = value
 	inspector.get_node("Container/VerticalSeparator/YAxisContainer/Value").editable = value
 	inspector.get_node("Container/VerticalSeparator/XExtentsContainer/Value").editable = value
