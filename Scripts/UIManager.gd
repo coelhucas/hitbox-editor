@@ -5,7 +5,7 @@ onready var box: PackedScene = preload("res://Scenes/HitBox.tscn")
 export var default_frame_color: Color
 export var playing_frame_color: Color
 
-const ANIMATED_SCENES_PATH: String = "res://Scenes/Entities/"
+const ANIMATED_SCENES_PATH: String = "./Animated/"
 
 var animation_player: AnimationPlayer
 
@@ -48,10 +48,12 @@ func _ready():
 	load_animated_entities()	
 	
 	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
-	sprite = get_tree().get_root().get_node("Canvas/CurrentSprite")
+	sprite = get_tree().get_root().get_node("Canvas/Sprite")
 	
+	if $Header/Separator/SpriteSelector.get_item_count() > 0:
+		pass
 func _process(delta):
-	if not loaded_animations:
+	if not loaded_animations and is_instance_valid(sprite):
 		animation_player = get_parent().animation_player
 		for animation in animation_player.get_animation_list():
 			$Header/Separator/AnimationSelector.add_item(animation)
@@ -78,7 +80,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("stop_animation") and Utils.is_playing:
 		Utils.is_playing = false
 	
-	if Input.is_action_just_pressed("play_animation"):
+	if Input.is_action_just_pressed("play_animation") and $Header/Separator/SpriteSelector.get_item_count() > 0:
 		Utils.is_playing = true
 	
 	# File
@@ -92,11 +94,23 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("open_inspector"):
 		_open_inspector()
-		
+	
+func _setup_initial_sprite():
+	var sprite_path: String = ANIMATED_SCENES_PATH + animated_entities_list[0]
+	var new_sprite = load(sprite_path).instance()
+	new_sprite.name = "Sprite"
+	get_node("/root/Canvas/SpriteContainer").add_child(new_sprite, true)
+	new_sprite.global_position = get_parent().get_node("MiddlePoint").global_position
+	new_sprite.get_node("AnimationPlayer").stop()
+	_update_sprite_selector()
 
 func load_animated_entities():
 	var animated_entities: Array = []
 	var animated_entities_dir: Directory = Directory.new()
+	
+	if not animated_entities_dir.dir_exists(ANIMATED_SCENES_PATH):
+		return # TODO: Show a tooltip explaining the needing of a "Test" folder containing the .TSCN files
+	
 	animated_entities_dir.open(ANIMATED_SCENES_PATH)
 	animated_entities_dir.list_dir_begin()
 	
@@ -112,20 +126,25 @@ func load_animated_entities():
 	
 	for entity in animated_entities:
 		$Header/Separator/SpriteSelector.add_item(entity)
+	
+	if $Header/Separator/SpriteSelector.get_item_count() > 0:
+		_setup_initial_sprite()
 
 func _change_sprite(ID: int):
-	get_parent().get_node("CurrentSprite").name = "Old"
-	get_parent().get_node("Old").queue_free()
+	if is_instance_valid(get_parent().get_node("Sprite")):
+		get_parent().get_node("Sprite").name = "Old"
+		get_parent().get_node("Old").queue_free()
 	var sprite_path: String = ANIMATED_SCENES_PATH + str(animated_entities_list[ID])
 	var new_sprite = load(sprite_path).instance()
+	new_sprite.name = "Sprite"
 	get_parent().add_child(new_sprite)
-	new_sprite.name = "CurrentSprite"
-	_update_sprite_selector()
 	new_sprite.global_position = get_parent().get_node("MiddlePoint").global_position
 	new_sprite.get_node("AnimationPlayer").stop()
+	_update_sprite_selector()
+	$Header/Separator/CurrentFrameLabel.text = "Frame: 0"
 	
 func _update_sprite_selector():
-	animation_player = get_parent().get_node("CurrentSprite/AnimationPlayer")
+	animation_player = get_parent().get_node("SpriteContainer/Sprite/AnimationPlayer")
 		
 	var new_sprite_animations: Array = animation_player.get_animation_list()
 	$Header/Separator/AnimationSelector.items = []
@@ -176,7 +195,7 @@ func _open_inspector():
 	$Inspector.visible = true
 
 func _on_AnimationSelector_item_selected(ID):
-	animation_player = get_parent().get_node("CurrentSprite/AnimationPlayer")
+	animation_player = get_parent().get_node("Sprite/AnimationPlayer")
 
 	Utils.is_playing = false
 	animation_player.current_animation = animation_player.get_animation_list()[ID]
@@ -184,14 +203,19 @@ func _on_AnimationSelector_item_selected(ID):
 
 
 func _on_PlayBtn_pressed():
-	Utils.is_playing = true
+	if $Header/Separator/SpriteSelector.get_item_count() > 0:
+		Utils.is_playing = true
 
 
 func _on_StopBtn_pressed():
-	Utils.is_playing = false
-	animation_player.seek(stepify(animation_player.current_animation_position, 0.1))
+	if $Header/Separator/SpriteSelector.get_item_count() > 0:
+		Utils.is_playing = false
+		animation_player.seek(stepify(animation_player.current_animation_position, 0.1))
 
 func _create_box():
+	if not is_instance_valid(get_node("/root/Canvas/SpriteContainer/Sprite")):
+		return
+	
 	var box_instance = box.instance()
 	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
 	box_instance.name = "HBOX" + str(boxes_parent.get_child_count())
@@ -201,6 +225,9 @@ func _create_box():
 
 func _delete_selected_box():
 	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
+	if boxes_parent.get_child_count() == 0:
+		return
+	
 	for child in boxes_parent.get_children():
 		if child.is_focused:
 			boxes_parent.remove_child(child)
