@@ -7,8 +7,9 @@ This is the first stable version to be used by everyone! Please relate any bug o
 
 This project was started as a tool for a game I'm making with a friend, which needed a dedicated tool for handling collision boxes accordingly with our animation frames and give us a output to be used later in-game. It's mainly focused to be used with Godot Engine at the moment.
 
-It work with animated `Scenes` from the [TSCN format](https://docs.godotengine.org/en/3.1/development/file_formats/tscn.html). [1]
-[1] You already can use your own `.TSCN` files, see the [Usage](#usage) section for details.
+It work with animated `Scenes` from the [TSCN format](https://docs.godotengine.org/en/3.1/development/file_formats/tscn.html).*
+
+*You already can use your own `.TSCN` files, see the [Usage](#usage) section for details.
 
 ## Features
 ### Done
