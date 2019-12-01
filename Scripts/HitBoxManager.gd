@@ -58,11 +58,11 @@ func _ready():
 	$Right.connect("button_up", self, "_right_scaler_up")
 	$Down.connect("button_up", self, "_down_scaler_up")
 	
-	current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
+	current_frame = int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10)
 	
 	use_custom_type(hit_type, false)
 	
-	sprite = get_node("/root/Canvas/CurrentSprite")
+	sprite = Utils.sprite
 
 	# Focuses the created box (if created manually)
 	if not "LOADED" in name:
@@ -73,10 +73,10 @@ func _ready():
 func _process(delta):
 	
 	if not is_instance_valid(sprite):
-		sprite = get_node("/root/Canvas/CurrentSprite")
+		sprite = get_node("/root/Canvas/Sprite")
 	
-	if current_frame != int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10):
-		current_frame = int(get_tree().get_root().get_node("Canvas/CurrentSprite/AnimationPlayer").current_animation_position * 10)
+	if current_frame != int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10):
+		current_frame = int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10)
 	
 	if is_hovered and Input.is_action_pressed("mouse_left"):
 		get_parent().move_child(self, get_parent().get_child_count() - 1)
@@ -98,6 +98,12 @@ func _process(delta):
 	
 	if prev_mouse_pos != get_global_mouse_position():
 		handle_update(delta)
+	
+	if $Collider.shape.extents.x == 0:
+		$Collider.shape.extents.x = 1
+	
+	if $Collider.shape.extents.y == 0:
+		$Collider.shape.extents.y = 1
 	
 	if $Collider.shape.extents != prev_collider_extents:
 		$Guide.rect_global_position.x = int($Collider.global_position.x) - $Collider.shape.extents.x

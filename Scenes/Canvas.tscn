@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
@@ -7,12 +7,11 @@
 [ext_resource path="res://CustomInterfaces/Hover.tres" type="StyleBox" id=5]
 [ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=6]
 [ext_resource path="res://CustomInterfaces/Normal.tres" type="StyleBox" id=7]
-[ext_resource path="res://Scenes/Entities/Player.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scripts/Useless/MusicController.gd" type="Script" id=9]
-[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=10]
-[ext_resource path="res://Music/JoJo AMV - Kakyoins Theme - Noble Pope.ogg" type="AudioStream" id=11]
-[ext_resource path="res://Music/Josuke theme but its only the good part.ogg" type="AudioStream" id=12]
-[ext_resource path="res://Music/Jotaro Theme but only the Good Parts are in.ogg" type="AudioStream" id=13]
+[ext_resource path="res://Scripts/Useless/MusicController.gd" type="Script" id=8]
+[ext_resource path="res://Music/giornos theme but only the best part is in.ogg" type="AudioStream" id=9]
+[ext_resource path="res://Music/JoJo AMV - Kakyoins Theme - Noble Pope.ogg" type="AudioStream" id=10]
+[ext_resource path="res://Music/Josuke theme but its only the good part.ogg" type="AudioStream" id=11]
+[ext_resource path="res://Music/Jotaro Theme but only the Good Parts are in.ogg" type="AudioStream" id=12]
 
 [node name="Canvas" type="Node2D"]
 script = ExtResource( 1 )
@@ -54,7 +53,6 @@ size_flags_vertical = 3
 script = ExtResource( 3 )
 
 [node name="Header" type="Panel" parent="CanvasLayer"]
-editor/display_folded = true
 margin_right = 1280.0
 margin_bottom = 28.0
 grow_horizontal = 0
@@ -200,13 +198,14 @@ margin_right = 271.0
 margin_bottom = 40.0
 
 [node name="From" type="LineEdit" parent="CanvasLayer/Header/ImportFrame/Separator"]
-margin_right = 184.0
-margin_bottom = 26.0
+margin_right = 263.0
+margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Frame ID"
 
 [node name="Inspector" type="WindowDialog" parent="CanvasLayer"]
+editor/display_folded = true
 visible = true
 margin_left = 1052.0
 margin_top = 171.0
@@ -215,6 +214,7 @@ margin_bottom = 683.0
 window_title = "Inspector"
 
 [node name="Container" type="CenterContainer" parent="CanvasLayer/Inspector"]
+editor/display_folded = true
 margin_left = 15.0
 margin_top = 6.0
 margin_right = 147.0
@@ -236,6 +236,7 @@ text = "UNSELECTED"
 align = 1
 
 [node name="TypeContainer" type="VBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
+editor/display_folded = true
 margin_top = 34.0
 margin_right = 157.0
 margin_bottom = 88.0
@@ -360,8 +361,6 @@ margin_right = 157.0
 margin_bottom = 488.0
 placeholder_text = "Value"
 
-[node name="CurrentSprite" parent="." instance=ExtResource( 8 )]
-
 [node name="Cursor" type="ColorRect" parent="."]
 margin_right = 1.0
 margin_bottom = 1.0
@@ -373,11 +372,13 @@ z_index = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 volume_db = -80.0
-script = ExtResource( 9 )
-musics = [ ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ]
+script = ExtResource( 8 )
+musics = [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ) ]
 
 [node name="ContinueAnimation" type="Timer" parent="."]
 wait_time = 0.02
+
+[node name="SpriteContainer" type="Node2D" parent="."]
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
 [connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]

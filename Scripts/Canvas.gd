@@ -1,6 +1,6 @@
 extends CanvasItem
 
-onready var animation_player: AnimationPlayer = $CurrentSprite/AnimationPlayer
+onready var animation_player: AnimationPlayer = get_node("SpriteContainer/SpriteAnimationPlayer")
 onready var box_scene: PackedScene = preload("res://Scenes/HitBox.tscn")
 
 const ANIMATION_SPEED: float = 0.08
@@ -31,15 +31,13 @@ var old_animation_position: float = 0.0
 var prev_frame: int = 0
 
 func _ready():
-	sprite = get_tree().get_root().get_node("Canvas/CurrentSprite")
+	sprite = get_tree().get_root().get_node("Canvas/Sprite")
 	boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	current_boxes = boxes.get_children()
 	get_tree().get_root().connect("size_changed", self, "_on_screen_resized")
 	$ContinueAnimation.wait_time = ANIMATION_SPEED
 	$ContinueAnimation.connect("timeout", self, "_continue_animation_timeout")
 	
-	sprite.global_position = $MiddlePoint.global_position
-
 func _process(delta):
 	
 	if Utils.is_playing and $ContinueAnimation.is_stopped():
@@ -54,21 +52,23 @@ func _process(delta):
 	prev_mouse_pos = get_global_mouse_position()
 	$Cursor.rect_position = get_global_mouse_position()
 	
-	if $CurrentSprite:
-		if Utils.is_playing and int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
+	if not is_instance_valid($SpriteContainer/Sprite):
+		return
+	else:
+		if Utils.is_playing and int(round($SpriteContainer/Sprite/AnimationPlayer.current_animation_position * 10)) != prev_frame:
 			Utils.create_stored_boxes()
-			prev_frame = int(round($CurrentSprite/AnimationPlayer.current_animation_position * 10))
+			prev_frame = int(round($SpriteContainer/Sprite/AnimationPlayer.current_animation_position * 10))
 			
 		
-			if old_animation_position != $CurrentSprite/AnimationPlayer.current_animation_position:
-				$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($CurrentSprite/AnimationPlayer.current_animation_position * 10))
-				old_animation_position = $CurrentSprite/AnimationPlayer.current_animation_position		
+			if old_animation_position != $SpriteContainer/Sprite/AnimationPlayer.current_animation_position:
+				$CanvasLayer/Header/Separator/CurrentFrameLabel.text = "Frame: " + str(int($SpriteContainer/Sprite/AnimationPlayer.current_animation_position * 10))
+				old_animation_position = $SpriteContainer/Sprite/AnimationPlayer.current_animation_position		
 				
 		if Input.is_action_just_pressed("ui_right"):
-			Utils.seek_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
+			Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position + 0.1)
 				
 		elif Input.is_action_just_pressed("ui_left"):
-			Utils.seek_frame($CurrentSprite/AnimationPlayer.current_animation_position - 0.1)
+			Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position - 0.1)
 			
 	if Input.is_action_pressed("mouse_middle") and first_camera_drag:
 		camera_offset = get_global_mouse_position() - $Camera2D.global_position
@@ -77,8 +77,7 @@ func _process(delta):
 	if Input.is_action_just_released("mouse_middle") and not first_camera_drag:
 		camera_offset = Vector2(0, 0)
 		first_camera_drag = true
-			
-
+	
 func mouse_update():
 	if not first_camera_drag:
 		pass
@@ -132,4 +131,4 @@ func _continue_animation_timeout():
 	if not Utils.is_playing:
 		return
 
-	Utils.seek_frame($CurrentSprite/AnimationPlayer.current_animation_position + 0.1)
+	Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position + 0.1)
