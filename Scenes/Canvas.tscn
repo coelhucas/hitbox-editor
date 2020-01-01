@@ -380,8 +380,8 @@ wait_time = 0.02
 
 [node name="SpriteContainer" type="Node2D" parent="."]
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
-[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
+[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="item_selected" from="CanvasLayer/Header/Separator/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]
