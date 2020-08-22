@@ -1,6 +1,6 @@
 ![](https://user-images.githubusercontent.com/28108272/90959201-de483b80-e46f-11ea-889d-6e227a7e4a0d.gif)
 
-# Hitbox Editor v0.1.0
+# Hitbox Editor v0.1.1
 
 ## Description
 This is the first stable version to be used by everyone! Please relate any bug or feature request if so.
