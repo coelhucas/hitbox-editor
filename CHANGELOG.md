@@ -6,6 +6,7 @@
 - [ADDED] [usage](USAGE.md) instructions;
 - [FIX] #08 where the tool crashed when adding a new `Animated`;
 - [FIX] animation selections from menu;
+- [FIX] wront node pathes when changing parameters;
 - [FIX] shortcuts which uses `CTRL+KEY`;
 
 ### [12-01-2019] (v0.1.0) WIP Stable Version
