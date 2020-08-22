@@ -59,6 +59,9 @@ grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Separator" type="HBoxContainer" parent="CanvasLayer/Header"]
 margin_left = 12.0
@@ -66,6 +69,9 @@ margin_right = 1280.0
 margin_bottom = 28.0
 focus_mode = 1
 custom_constants/separation = 16
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="File" type="MenuButton" parent="CanvasLayer/Header/Separator"]
 margin_right = 56.0
@@ -132,8 +138,8 @@ text = "Stop"
 
 [node name="Button" type="Button" parent="CanvasLayer/Header/Separator"]
 visible = false
-margin_left = 623.0
-margin_right = 634.0
+margin_left = 632.0
+margin_right = 643.0
 margin_bottom = 28.0
 focus_mode = 1
 custom_styles/hover = ExtResource( 5 )
@@ -168,8 +174,8 @@ margin_right = 894.0
 margin_bottom = 586.0
 resizable = true
 access = 2
-current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
-current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
 
 [node name="OpenFile" type="FileDialog" parent="CanvasLayer/Header"]
 margin_left = 389.0
@@ -180,10 +186,11 @@ window_title = "Open a File"
 resizable = true
 mode = 0
 access = 2
-current_dir = "/Users/lcrabbit/Projects/Hitbox Editor"
-current_path = "/Users/lcrabbit/Projects/Hitbox Editor/"
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
 
 [node name="ImportFrame" type="ConfirmationDialog" parent="CanvasLayer/Header"]
+visible = true
 margin_left = 559.0
 margin_top = 317.0
 margin_right = 759.0
@@ -205,16 +212,17 @@ size_flags_vertical = 3
 placeholder_text = "Frame ID"
 
 [node name="Inspector" type="WindowDialog" parent="CanvasLayer"]
-editor/display_folded = true
 visible = true
 margin_left = 1052.0
 margin_top = 171.0
 margin_right = 1243.0
 margin_bottom = 683.0
 window_title = "Inspector"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Container" type="CenterContainer" parent="CanvasLayer/Inspector"]
-editor/display_folded = true
 margin_left = 15.0
 margin_top = 6.0
 margin_right = 147.0
@@ -236,7 +244,6 @@ text = "UNSELECTED"
 align = 1
 
 [node name="TypeContainer" type="VBoxContainer" parent="CanvasLayer/Inspector/Container/VerticalSeparator"]
-editor/display_folded = true
 margin_top = 34.0
 margin_right = 157.0
 margin_bottom = 88.0
@@ -380,8 +387,8 @@ wait_time = 0.02
 
 [node name="SpriteContainer" type="Node2D" parent="."]
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
-[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
+[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="item_selected" from="CanvasLayer/Header/Separator/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]

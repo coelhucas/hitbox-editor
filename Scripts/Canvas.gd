@@ -1,6 +1,6 @@
 extends CanvasItem
 
-onready var animation_player: AnimationPlayer = get_node("SpriteContainer/SpriteAnimationPlayer")
+onready var animation_player: AnimationPlayer = get_node("SpriteContainer/Sprite/AnimationPlayer")
 onready var box_scene: PackedScene = preload("res://Scenes/HitBox.tscn")
 
 const ANIMATION_SPEED: float = 0.08
@@ -31,7 +31,7 @@ var old_animation_position: float = 0.0
 var prev_frame: int = 0
 
 func _ready():
-	sprite = get_tree().get_root().get_node("Canvas/Sprite")
+	sprite = get_tree().get_root().get_node("Canvas/SpriteConatiner/Sprite")
 	boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	current_boxes = boxes.get_children()
 	get_tree().get_root().connect("size_changed", self, "_on_screen_resized")
@@ -128,7 +128,9 @@ func _on_screen_resized():
 	grid_ready = false
 
 func _continue_animation_timeout():
+	print("Ula")
 	if not Utils.is_playing:
+		print("La")
 		return
 
 	Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position + 0.1)
