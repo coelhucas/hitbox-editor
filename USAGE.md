@@ -112,4 +112,16 @@ Each primary key represents an animation name, and the parameters are mostly sel
 
 With this data you can make a simple parser in any engine/framework to handle and generate this data dynamically in your fight/beat'em up game, for instance.
 
+## Shortcuts Cheatsheet
+`A` -> creates a new box;
+`Z` -> deletes the selected box;
+`CTRL+O` -> opens a tool generated file (in JSON format)*;
+`CTRL+S` -> saves a tool generated file (in JSON format);
+`CTRL+I` -> import frames of another frame;
+`I` -> opens the inspector;
+`Left/Right arrows` -> prev/next frame;
+`P/S` -> plays/stops the current animation.
+
+Feel free to suggest changes and new shortcuts [here](https://github.com/coelhucas/hitbox-editor/issues).
+
 This usage section will be modified and improved, but I hope this helps for now.
