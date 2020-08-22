@@ -9,7 +9,7 @@ This project was started as a tool for a game I'm making with a friend, which ne
 
 It work with animated `Scenes` from the [TSCN format](https://docs.godotengine.org/en/latest/development/file_formats/tscn.html).*
 
-*You already can use your own `.TSCN` files, see the [Usage](#usage) section for details.
+*You already can use your own `.TSCN` files, see the [Usage](USAGE.md) section for details.
 
 ## ROADMAP
 ### Done
@@ -34,14 +34,6 @@ Clone the repository from `git@github.com:coelhucas/hitbox-editor.git`
 `git clone git@github.com:coelhucas/hitbox-editor.git`
 
 Scan the project with Godot 3.2.1 + or [use the comand line](https://docs.godotengine.org/en/latest/getting_started/editor/command_line_tutorial.html) to [export the project](https://docs.godotengine.org/en/latest/getting_started/workflow/export/exporting_projects.html).
-
-### Usage
-You need to have a folder on the project's root called `Animated/` where your `.TSCN` files will be contained. The supported format is:
-```
-- An Node2D or derivative
-  |_ AnimationPlayer # Currently the name must be AnimationPlayer, containing your animations
-
-```
 
 ## License
 

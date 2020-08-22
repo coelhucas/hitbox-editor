@@ -16,6 +16,8 @@ You can see that there's also an example file to help you understand how this se
 ## Editing
 
 From this point, you can select the desired animation to be worked on at the second selector at the topbar:
+
+
 ![image](https://user-images.githubusercontent.com/28108272/90959881-05a10780-e474-11ea-89db-69295789c21e.png)
 
 With the arrow keys, you can go to the next or previous frame in the animation.
@@ -113,14 +115,14 @@ Each primary key represents an animation name, and the parameters are mostly sel
 With this data you can make a simple parser in any engine/framework to handle and generate this data dynamically in your fight/beat'em up game, for instance.
 
 ## Shortcuts Cheatsheet
-`A` -> creates a new box;
-`Z` -> deletes the selected box;
-`CTRL+O` -> opens a tool generated file (in JSON format)*;
-`CTRL+S` -> saves a tool generated file (in JSON format);
-`CTRL+I` -> import frames of another frame;
-`I` -> opens the inspector;
-`Left/Right arrows` -> prev/next frame;
-`P/S` -> plays/stops the current animation.
+- `A` -> creates a new box;
+- `Z` -> deletes the selected box;
+- `CTRL+O` -> opens a tool generated file (in JSON format)*;
+- `CTRL+S` -> saves a tool generated file (in JSON format);
+- `CTRL+I` -> import frames of another frame;
+- `I` -> opens the inspector;
+- `Left/Right arrows` -> prev/next frame;
+- `P/S` -> plays/stops the current animation.
 
 Feel free to suggest changes and new shortcuts [here](https://github.com/coelhucas/hitbox-editor/issues).
 
