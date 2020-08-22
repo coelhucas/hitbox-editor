@@ -45,16 +45,21 @@ func _ready():
 	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("TAUNT")
 	
 	$Header/Separator/SpriteSelector.connect("item_selected", self, "_change_sprite")
-	load_animated_entities()	
+	load_animated_entities()
 	
 	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
-	sprite = get_tree().get_root().get_node("Canvas/Sprite")
+	sprite = get_tree().get_root().get_node("Canvas/SpriteContainer/Sprite")
 	
 	if $Header/Separator/SpriteSelector.get_item_count() > 0:
 		pass
+		
 func _process(delta):
 	if not loaded_animations and is_instance_valid(sprite):
 		animation_player = get_parent().animation_player
+		
+		if not Utils.is_playing and animation_player.is_playing():
+			animation_player.stop()
+		
 		for animation in animation_player.get_animation_list():
 			$Header/Separator/AnimationSelector.add_item(animation)
 		
@@ -79,6 +84,7 @@ func _process(delta):
 	# Animation
 	if Input.is_action_just_pressed("stop_animation") and Utils.is_playing:
 		Utils.is_playing = false
+		print("false")
 	
 	if Input.is_action_just_pressed("play_animation") and $Header/Separator/SpriteSelector.get_item_count() > 0:
 		Utils.is_playing = true
@@ -99,10 +105,12 @@ func _setup_initial_sprite():
 	var sprite_path: String = ANIMATED_SCENES_PATH + animated_entities_list[0]
 	var new_sprite = load(sprite_path).instance()
 	new_sprite.name = "Sprite"
-	get_node("/root/Canvas/SpriteContainer").add_child(new_sprite, true)
 	new_sprite.global_position = get_parent().get_node("MiddlePoint").global_position
+	print(new_sprite.get_children())
+	print(new_sprite.get_node("AnimationPlayer").is_playing())
 	new_sprite.get_node("AnimationPlayer").stop()
-	_update_sprite_selector()
+	get_node("/root/Canvas/SpriteContainer").add_child(new_sprite, true)
+#	_update_sprite_selector()
 
 func load_animated_entities():
 	var animated_entities: Array = []
@@ -177,7 +185,7 @@ func _box_option_selected(ID: int):
 func _save_at_dir():
 	var dir: String = $Header/SaveFile.get_current_path()
 	var file = File.new()
-	file.open(dir, File.WRITE)
+	file.open(dir + Utils.JSON_SUFIX, File.WRITE)
 	file.store_string(to_json(Utils.boxes_data))
 	file.close()
 
@@ -188,18 +196,22 @@ func _open_file(dir: String):
 	
 	file.open(dir, File.READ)
 	Utils.boxes_data = parse_json(file.get_as_text())
-	get_parent().display_updated_data()
+	_import_frame_data()
 	file.close()
 
 func _open_inspector():
 	$Inspector.visible = true
 
 func _on_AnimationSelector_item_selected(ID):
-	animation_player = get_parent().get_node("Sprite/AnimationPlayer")
+	for node in get_parent().get_node("SpriteContainer/Sprite").get_children():
+		if node is AnimationPlayer:
+			animation_player = node
 
-	Utils.is_playing = false
 	animation_player.current_animation = animation_player.get_animation_list()[ID]
-	Utils.is_playing = true
+	animation_player.seek(0, true)
+	if animation_player.is_playing():
+		animation_player.stop()
+	Utils.is_playing = false
 
 
 func _on_PlayBtn_pressed():
@@ -264,7 +276,9 @@ func _import_frame_data() -> void:
 				new_box.hit_type = box_data.type
 				new_box.name = "LOADED-HBOX" + str(h_boxes.get_child_count())
 				h_boxes.add_child(new_box)
-				new_box_collider.shape.extents = Vector2(box_data.dimensions.x, box_data.dimensions.y)
+#				Dimensions here are divided by 2 because we save it as a raw size,
+#				so it can be parsed in other engines/frameworks without generating any noise.
+				new_box_collider.shape.extents = Vector2(box_data.dimensions.x / 2, box_data.dimensions.y / 2)
 				new_box.rect_global_position = Vector2(box_data.position.x, box_data.position.y) + sprite.global_position
 		else:
 			pass

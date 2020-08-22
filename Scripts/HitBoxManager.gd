@@ -71,7 +71,7 @@ func _ready():
 		update_selection(box_background_texture, 0.2, false)
 
 func _process(delta):
-	
+	update()
 	if not is_instance_valid(sprite):
 		sprite = get_node("/root/Canvas/Sprite")
 	
@@ -119,6 +119,12 @@ func _process(delta):
 
 	prev_collider_extents = $Collider.shape.extents
 	
+func _draw():
+	# Your draw commands here
+	var rect: Rect2 = Rect2(Vector2.ZERO - $Collider.shape.extents, $Collider.shape.extents * 2)
+	
+	draw_rect(rect, Color(0, 0, 0, 0.2), false, 1.1, true)
+	
 func focus():
 	is_focused = true
 	update_selection(selected_box_background_texture, 0.5)
@@ -148,7 +154,7 @@ func update_selection(texture: Texture, alpha: float, save: bool = true):
 	if is_focused:
 		Utils.update_selected_box_type(hit_type)
 	
-	$Guide.texture = texture
+#	$Guide.texture = texture
 	$Guide.modulate.a = alpha
 		
 func change_hit_type() -> void:
@@ -187,7 +193,7 @@ func update_collision_shape(axis: String) -> void:
 	if not is_focused:
 		focus()
 		
-	var obj_shape: ConvexPolygonShape2D = $Collider.shape
+	var obj_shape: RectangleShape2D = $Collider.shape
 	
 	if axis == "vertical":
 		obj_shape.extents.y = int(abs(get_global_mouse_position().y - $Collider.global_position.y))
@@ -243,3 +249,11 @@ func _drag_area_mouse_exited():
 	dragging_box = false
 	offset_x = 0
 	offset_y = 0
+
+
+func _on_Guide_mouse_entered():
+	pass # Replace with function body.
+
+
+func _on_Guide_mouse_exited():
+	pass # Replace with function body.

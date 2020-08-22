@@ -7,13 +7,13 @@ onready var sprite = get_node("/root/Canvas/SpriteContainer/Sprite")
 onready var inspector = get_node("/root/Canvas/CanvasLayer/Inspector")
 onready	var collision_boxes = get_node("/root/Canvas/Boxes")
 
-
-
+const ANIMATION_END_OFFSET: float = 0.1
+const JSON_SUFIX: String = ".json"
 const BOX_TYPES: Dictionary = {
 	0: "hitbox",
 	1: "hurtbox",
 	2: "taunt",
-	3: "parry"	
+	3: "parry"
 }
 
 const BOX_IDS: Dictionary = {
@@ -133,8 +133,8 @@ func save_data(current_frame: int):
 		var juggle = int(box.juggle)
 		var pos = collider.global_position - sprite.global_position
 		var dimensions: Dictionary = {
-			"x": collider.shape.extents.x,
-			"y": collider.shape.extents.y
+			"x": collider.shape.extents.x * 2,
+			"y": collider.shape.extents.y * 2
 		}
 		boxes_array.append({
 			"type": type,
@@ -158,15 +158,22 @@ func clear_current_boxes():
 		child.free()
 
 func seek_frame(frame: float):
+	print(frame < 0)
+	
 	if not is_instance_valid(animation_player):
+		print("Gettinh a new")
 		animation_player = get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer")
 	
+	print("Anim: %s" % animation_player.assigned_animation)
 	save_data(int(animation_player.current_animation_position * 10))
 	
-	if frame > animation_player.current_animation_length:
+	var anim_length: float = animation_player.get_animation(animation_player.assigned_animation).length
+	
+	if frame > anim_length - ANIMATION_END_OFFSET:
 		animation_player.seek(0, true)
 	elif frame < 0:
-		animation_player.seek(animation_player.current_animation_length, true)
+		print(animation_player.current_animation_length)
+		animation_player.seek(anim_length - ANIMATION_END_OFFSET, true)
 	else:
 		animation_player.seek(frame, true)
 	
@@ -195,7 +202,7 @@ func create_stored_boxes():
 					new_box.name = "ANIMATED-HBOX" + str(collision_boxes.get_child_count())
 				else:
 					new_box.name = "LOADED-HBOX" + str(collision_boxes.get_child_count())
-				new_box_collider.shape.extents = Vector2(box.dimensions.x, box.dimensions.y)
+				new_box_collider.shape.extents = Vector2(box.dimensions.x / 2, box.dimensions.y / 2)
 				new_box.rect_global_position = Vector2(box.position.x, box.position.y) + sprite.global_position
 			
 	if collision_boxes.get_children().size() > 0:
@@ -213,14 +220,14 @@ func _update_hitbox_knockback(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.knockback = int(new_value)
-		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
+		save_data(int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10))
 
 # Saved here for now
 func _update_hitbox_juggle(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.juggle = int(new_value)
-		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
+		save_data(int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10))
 
 # Below properties need to be saved manually here
 func _update_box_position_x(new_value: String):
@@ -230,7 +237,7 @@ func _update_box_position_x(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.rect_global_position.x = int(new_value) + int(sprite.global_position.x)
-		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
+		save_data(int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10))
 			
 func _update_box_position_y(new_value: String):
 	if not is_instance_valid(sprite):
