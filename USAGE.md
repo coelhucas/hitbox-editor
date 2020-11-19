@@ -29,7 +29,7 @@ You can also define parameters to a specific hitbox, such as *juggle* and *knock
 ## Output
 
 After editing your boxes, you can preview it with P or pressing "Play". With `CTRL+S` or `File -> Save (CTRL + S)` you can save the output JSON file which can be later opened by the tool. This JSON has the following format:
-```
+```json
 {
    "idle":{
       "0":[
@@ -68,37 +68,7 @@ After editing your boxes, you can preview it with P or pressing "Play". With `CT
                "x":0,
                "y":0
             },
-            "type":"hitbox"
-         }
-      ],
-      "3":[
-         {
-            "dimensions":{
-               "x":20,
-               "y":10
-            },
-            "juggle":0,
-            "knockback":0,
-            "position":{
-               "x":23,
-               "y":14
-            },
-            "type":"hitbox"
-         }
-      ],
-      "4":[
-         {
-            "dimensions":{
-               "x":20,
-               "y":8
-            },
-            "juggle":0,
-            "knockback":0,
-            "position":{
-               "x":17,
-               "y":19
-            },
-            "type":"hitbox"
+            "type":"hurtbox"
          }
       ]
    }
@@ -117,12 +87,15 @@ With this data you can make a simple parser in any engine/framework to handle an
 ## Shortcuts Cheatsheet
 - `A` -> creates a new box;
 - `Z` -> deletes the selected box;
-- `CTRL+O` -> opens a tool generated file (in JSON format)*;
+- `CTRL+O` -> opens a tool generated file (in JSON format);
+- `CTRL+I` -> imports a tool generated file (in JSON format)*;
 - `CTRL+S` -> saves a tool generated file (in JSON format);
-- `CTRL+I` -> import frames of another frame;
+- `SHIFT+I` -> import frames of another frame;
 - `I` -> opens the inspector;
 - `Left/Right arrows` -> prev/next frame;
 - `P/S` -> plays/stops the current animation.
+
+* Instead of replacing your current boxes, it "append" them to the imported ones.
 
 Feel free to suggest changes and new shortcuts [here](https://github.com/coelhucas/hitbox-editor/issues).
 
