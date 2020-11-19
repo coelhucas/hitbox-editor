@@ -75,22 +75,25 @@ func _process(_delta: float) -> void:
 		
 	# Application shortcuts
 	# Box
-	if Input.is_action_just_pressed("add_new"):
+	if Input.is_action_just_pressed("add_new") and not Utils.has_popup_open():
 		_create_box()
 	
-	if Input.is_action_just_pressed("delete_selected"):
+	if Input.is_action_just_pressed("delete_selected") and not Utils.has_popup_open():
 		_delete_selected_box()
 		
-	if Input.is_action_just_pressed("open_import_menu"):
+	if Input.is_action_just_pressed("open_import_menu") and not Utils.has_popup_open():
 		_open_import_popup()
 		
 	# Animation
-	if Input.is_action_just_pressed("stop_animation") and Utils.is_playing:
+	if Input.is_action_just_pressed("stop_animation") and Utils.is_playing and not Utils.has_popup_open():
 		Utils.is_playing = false
 	
-	if Input.is_action_just_pressed("play_animation") and $Header/Separator/SpriteSelector.get_item_count() > 0:
+	if Input.is_action_just_pressed("play_animation") and $Header/Separator/SpriteSelector.get_item_count() > 0 and not Utils.has_popup_open():
 		Utils.is_playing = true
 	
+	if Input.is_action_just_pressed("open_inspector") and not Utils.has_popup_open():
+		_open_inspector()
+		
 	# File
 	if Input.is_action_just_pressed("save_file"):
 		$Header/SaveFile.visible = true
@@ -100,9 +103,6 @@ func _process(_delta: float) -> void:
 		$Header/OpenFile.visible = true
 		$Header/OpenFile.invalidate()
 	
-	if Input.is_action_just_pressed("open_inspector"):
-		_open_inspector()
-	
 func _setup_initial_sprite():
 	var sprite_path: String = ANIMATED_SCENES_PATH + animated_entities_list[0]
 	var new_sprite = load(sprite_path).instance()
@@ -110,7 +110,6 @@ func _setup_initial_sprite():
 	new_sprite.global_position = get_parent().get_node("MiddlePoint").global_position
 	new_sprite.get_node("AnimationPlayer").stop()
 	get_node("/root/Canvas/SpriteContainer").add_child(new_sprite, true)
-#	_update_sprite_selector()
 
 func load_animated_entities():
 	var animated_entities: Array = []

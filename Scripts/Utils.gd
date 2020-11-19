@@ -1,11 +1,16 @@
 extends Node
 
+enum States {
+	NORMAL,
+	DIALOG
+}
+
 onready var box_scene: PackedScene = preload("res://Scenes/HitBox.tscn")
-var sprite: Sprite
 
 onready var inspector = get_node("/root/Canvas/CanvasLayer/Inspector")
 onready	var collision_boxes = get_node("/root/Canvas/Boxes")
 
+const POPUP_GROUP: String = "popup"
 const ANIMATION_PLAYER_PATH: String = "/root/Canvas/SpriteContainer/Sprite/AnimationPlayer"
 const ANIMATION_END_OFFSET: float = 0.1
 const JSON_SUFIX: String = ".json"
@@ -23,6 +28,8 @@ const BOX_IDS: Dictionary = {
 	"parry": 3
 }
 
+var state: int = States.NORMAL
+var sprite: Sprite
 var animation_player: AnimationPlayer
 var boxes_data: Dictionary = {}
 var selected_box: Dictionary = {}
@@ -87,6 +94,12 @@ func update_selected_box(name: String, position: Vector2, extents: Vector2, type
 func update_selected_box_type(type: String) -> void:
 	selected_box.type = type
 	_update_inspector()
+
+func has_popup_open() -> bool:
+	for node in get_tree().get_nodes_in_group(POPUP_GROUP):
+		if node is Popup and (node as Popup).visible:
+			return true
+	return false
 
 func clear_selected_box():
 	update_selected_box("UNSELECTED", Vector2(0, 0), Vector2(0, 0), "hitbox", 0, 0)

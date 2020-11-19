@@ -68,6 +68,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 4 )
 text = "File"
+switch_on_hover = true
 
 [node name="Box" type="MenuButton" parent="CanvasLayer/Header/Separator"]
 margin_left = 72.0
@@ -75,6 +76,7 @@ margin_right = 117.0
 margin_bottom = 28.0
 custom_fonts/font = ExtResource( 4 )
 text = "Box"
+switch_on_hover = true
 
 [node name="SpriteSelector" type="OptionButton" parent="CanvasLayer/Header/Separator"]
 margin_left = 133.0
@@ -155,34 +157,13 @@ custom_styles/pressed = ExtResource( 6 )
 custom_styles/normal = ExtResource( 7 )
 text = ">"
 
-[node name="SaveFile" type="FileDialog" parent="CanvasLayer/Header"]
-margin_left = 391.0
-margin_top = 171.0
-margin_right = 894.0
-margin_bottom = 586.0
-resizable = true
-access = 2
-current_dir = "/media/Files/projects/hitbox-editor"
-current_path = "/media/Files/projects/hitbox-editor/"
-
-[node name="OpenFile" type="FileDialog" parent="CanvasLayer/Header"]
-margin_left = 389.0
-margin_top = 171.0
-margin_right = 894.0
-margin_bottom = 586.0
-window_title = "Open a File"
-resizable = true
-mode = 0
-access = 2
-current_dir = "/media/Files/projects/hitbox-editor"
-current_path = "/media/Files/projects/hitbox-editor/"
-
-[node name="ImportFrame" type="ConfirmationDialog" parent="CanvasLayer/Header"]
-visible = true
+[node name="ImportFrame" type="ConfirmationDialog" parent="CanvasLayer/Header" groups=[
+"popup",
+]]
 margin_left = 559.0
 margin_top = 317.0
-margin_right = 759.0
-margin_bottom = 387.0
+margin_right = 838.0
+margin_bottom = 401.0
 rect_pivot_offset = Vector2( 102, 28 )
 window_title = "Import from frame...."
 
@@ -199,12 +180,41 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Frame ID"
 
+[node name="SaveFile" type="FileDialog" parent="CanvasLayer/Header" groups=[
+"popup",
+]]
+margin_left = 391.0
+margin_top = 171.0
+margin_right = 894.0
+margin_bottom = 586.0
+popup_exclusive = true
+resizable = true
+access = 2
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
+
+[node name="OpenFile" type="FileDialog" parent="CanvasLayer/Header" groups=[
+"popup",
+]]
+margin_left = 389.0
+margin_top = 171.0
+margin_right = 894.0
+margin_bottom = 586.0
+popup_exclusive = true
+window_title = "Open a File"
+resizable = true
+mode = 0
+access = 2
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
+
 [node name="Inspector" type="WindowDialog" parent="CanvasLayer"]
 visible = true
 margin_left = 1052.0
 margin_top = 171.0
 margin_right = 1243.0
 margin_bottom = 683.0
+popup_exclusive = true
 window_title = "Inspector"
 __meta__ = {
 "_edit_use_anchors_": false

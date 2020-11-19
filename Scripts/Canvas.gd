@@ -12,7 +12,6 @@ const ZOOM_AMOUNT: int = 2
 const CAM_SPEED: float = 25.0
 const MAX_ZOOM_OUT: Vector2 = Vector2(1, 1)
 
-
 var sprite
 var tile_size: int = 1
 var grid_ready: bool = false
