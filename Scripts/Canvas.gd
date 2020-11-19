@@ -31,15 +31,20 @@ var old_animation_position: float = 0.0
 var prev_frame: int = 0
 
 func _ready():
-	sprite = get_tree().get_root().get_node("Canvas/SpriteConatiner/Sprite")
+	sprite = get_tree().get_root().get_node_or_null("Canvas/SpriteConatiner/Sprite")
 	boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	current_boxes = boxes.get_children()
-	get_tree().get_root().connect("size_changed", self, "_on_screen_resized")
+	var err: int
+	err = get_tree().get_root().connect("size_changed", self, "_on_screen_resized")
+	err = $ContinueAnimation.connect("timeout", self, "_continue_animation_timeout")
+	
+	if err != OK:
+		push_error("Error")
+		return
+	
 	$ContinueAnimation.wait_time = ANIMATION_SPEED
-	$ContinueAnimation.connect("timeout", self, "_continue_animation_timeout")
 	
-func _process(delta):
-	
+func _process(_delta: float) -> void:
 	if Utils.is_playing and $ContinueAnimation.is_stopped():
 		$ContinueAnimation.start()
 	elif not Utils.is_playing and not $ContinueAnimation.is_stopped():
@@ -65,10 +70,10 @@ func _process(delta):
 				old_animation_position = $SpriteContainer/Sprite/AnimationPlayer.current_animation_position		
 				
 		if Input.is_action_just_pressed("ui_right"):
-			Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position + 0.1)
+			Utils.seek_frame(Utils.animation_pos + 0.1)
 				
 		elif Input.is_action_just_pressed("ui_left"):
-			Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position - 0.1)
+			Utils.seek_frame(Utils.animation_pos - 0.1)
 			
 	if Input.is_action_pressed("mouse_middle") and first_camera_drag:
 		camera_offset = get_global_mouse_position() - $Camera2D.global_position

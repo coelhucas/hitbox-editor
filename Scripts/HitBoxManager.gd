@@ -42,23 +42,28 @@ func _ready():
 	collision_shape.extents.y = 10
 	$Collider.shape = collision_shape
 	
+	var err: int
+	
 	# Mouse enter/Mouse exit
-	$Guide.connect("mouse_entered", self, "_drag_area_mouse_entered")
-	$Guide.connect("mouse_exited", self, "_drag_area_mouse_exited")
+	err = $Guide.connect("mouse_entered", self, "_drag_area_mouse_entered")
+	err = $Guide.connect("mouse_exited", self, "_drag_area_mouse_exited")
 	
 	# Button down signals
-	$Left.connect("button_down", self, "_left_scaler_down")
-	$Up.connect("button_down", self, "_up_scaler_down")
-	$Right.connect("button_down", self, "_right_scaler_down")
-	$Down.connect("button_down", self, "_down_scaler_down")
+	err = $Left.connect("button_down", self, "_left_scaler_down")
+	err = $Up.connect("button_down", self, "_up_scaler_down")
+	err = $Right.connect("button_down", self, "_right_scaler_down")
+	err = $Down.connect("button_down", self, "_down_scaler_down")
 	
 	# Button up signals
-	$Left.connect("button_up", self, "_left_scaler_up")
-	$Up.connect("button_up", self, "_up_scaler_up")
-	$Right.connect("button_up", self, "_right_scaler_up")
-	$Down.connect("button_up", self, "_down_scaler_up")
+	err = $Left.connect("button_up", self, "_left_scaler_up")
+	err = $Up.connect("button_up", self, "_up_scaler_up")
+	err = $Right.connect("button_up", self, "_right_scaler_up")
+	err = $Down.connect("button_up", self, "_down_scaler_up")
 	
-	current_frame = Utils.get_animation_frame(get_node(Utils.ANIMATION_PLAYER_PATH))
+	if err != OK:
+		print("Error ERROR")
+	
+	current_frame = Utils.get_animation_frame()
 	
 	use_custom_type(hit_type, false)
 	
@@ -68,15 +73,15 @@ func _ready():
 	if not "LOADED" in name:
 		focus()
 	else:
-		update_selection(box_background_texture, 0.2, false)
+		update_selection(0.2, false)
 
 func _process(delta):
 	update()
 	if not is_instance_valid(sprite):
 		sprite = get_node("/root/Canvas/Sprite")
 	
-	if current_frame != Utils.get_animation_frame(get_node(Utils.ANIMATION_PLAYER_PATH)):
-		current_frame = Utils.get_animation_frame(get_node(Utils.ANIMATION_PLAYER_PATH))
+	if current_frame != Utils.get_animation_frame():
+		current_frame = Utils.get_animation_frame()
 	
 	if is_hovered and Input.is_action_pressed("mouse_left"):
 		get_parent().move_child(self, get_parent().get_child_count() - 1)
@@ -125,17 +130,17 @@ func _draw():
 	
 	draw_rect(rect, Color(0, 0, 0, 0.2), false, 1.1, true)
 	
-func focus():
+func focus() -> void:
 	is_focused = true
-	update_selection(selected_box_background_texture, 0.5)
+	update_selection(0.5)
 	Utils.update_selected_box(name, rect_global_position - sprite.global_position, $Collider.shape.extents, hit_type, juggle, knockback)
 	
 	for child in get_parent().get_children():
 			if child.name != name:
-				child.update_selection(box_background_texture, 0.2, false)
+				child.update_selection(0.2, false)
 				child.is_focused = false
 
-func handle_update(delta):
+func handle_update(_delta: float) -> void:
 	prev_mouse_pos = get_global_mouse_position()
 	
 	if dragging_box:
@@ -147,30 +152,27 @@ func handle_update(delta):
 	if horizontal_resizing:
 		update_collision_shape("horizontal")
 
-func update_selection(texture: Texture, alpha: float, save: bool = true):
+func update_selection(alpha: float, save: bool = true):
 	if save:
 		Utils.save_data(current_frame)
 	
 	if is_focused:
 		Utils.update_selected_box_type(hit_type)
 	
-#	$Guide.texture = texture
 	$Guide.modulate.a = alpha
 		
 func change_hit_type() -> void:
 	if hit_type == "hitbox":
 		$Guide.modulate = hurtbox_color
 		hit_type = "hurtbox"
-	elif hit_type == "hurtbox":
+	else:
 		$Guide.modulate = hitbox_color
 		hit_type = "hitbox"
-	else:
-		hit_type == "hitbox"
 	
 	if is_focused:
-		update_selection(selected_box_background_texture, 0.5)
+		update_selection(0.5)
 	else:
-		update_selection(box_background_texture, 0.2)
+		update_selection(0.2)
 
 func use_custom_type(which: String, save: bool = true) -> void:
 	hit_type = which
@@ -185,9 +187,9 @@ func use_custom_type(which: String, save: bool = true) -> void:
 			$Guide.modulate = parry_color
 	
 	if is_focused:
-		update_selection(selected_box_background_texture, 0.5, save)
+		update_selection(0.5, save)
 	else:
-		update_selection(box_background_texture, 0.2, save)
+		update_selection(0.2, save)
 
 func update_collision_shape(axis: String) -> void:
 	if not is_focused:

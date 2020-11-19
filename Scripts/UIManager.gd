@@ -19,24 +19,26 @@ func _ready():
 	$Inspector.visible = true
 	
 	$Header/SaveFile.add_filter("*.JSON ; JSON Files")
-	$Header/SaveFile.connect("confirmed", self, "_save_at_dir")
 	$Header/OpenFile.add_filter("*.JSON ; JSON Files")
-	$Header/OpenFile.connect("file_selected", self, "_open_file")
+	
+	var err: int
+	err = $Header/SaveFile.connect("confirmed", self, "_save_at_dir")
+	err = $Header/OpenFile.connect("file_selected", self, "_open_file")
 	
 	var file_popup = $Header/Separator/File.get_popup()
-	file_popup.connect("id_pressed", self, "_file_option_selected")
+	err = file_popup.connect("id_pressed", self, "_file_option_selected")
 	file_popup.add_item("Open (CTRL+O)")
 	file_popup.add_item("Save (CTRL+S)")
 	file_popup.add_item("Open Inspector (I)")
 	
 	var box_popup = $Header/Separator/Box.get_popup()
-	box_popup.connect("id_pressed", self, "_box_option_selected")
+	err = box_popup.connect("id_pressed", self, "_box_option_selected")
 	box_popup.add_item("New (A)")
 	box_popup.add_item("Delete selected (Z)")
 	box_popup.add_item("Import from another frame (CTRL+I)")
 	
 	
-	$Header/ImportFrame.connect("confirmed", self, "_import_frame_data")
+	err = $Header/ImportFrame.connect("confirmed", self, "_import_frame_data")
 	$Header/ImportFrame.register_text_enter($Header/ImportFrame/Separator/From)
 	
 	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("HITBOX")
@@ -44,16 +46,17 @@ func _ready():
 	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("PARRY")
 	$Inspector/Container/VerticalSeparator/TypeContainer/Type.add_item("TAUNT")
 	
-	$Header/Separator/SpriteSelector.connect("item_selected", self, "_change_sprite")
+	err = $Header/Separator/SpriteSelector.connect("item_selected", self, "_change_sprite")
 	load_animated_entities()
+	
+	if err != OK:
+		push_error("Error")
+		return
 	
 	h_boxes = get_tree().get_root().get_node("Canvas/Boxes")
 	sprite = get_tree().get_root().get_node("Canvas/SpriteContainer/Sprite")
 	
-	if $Header/Separator/SpriteSelector.get_item_count() > 0:
-		pass
-		
-func _process(delta):
+func _process(_delta: float) -> void:
 	if not loaded_animations and is_instance_valid(sprite):
 		animation_player = get_parent().animation_player
 		
@@ -116,8 +119,10 @@ func load_animated_entities():
 	if not animated_entities_dir.dir_exists(ANIMATED_SCENES_PATH):
 		return # TODO: Show a tooltip explaining the needing of a "Test" folder containing the .TSCN files
 	
-	animated_entities_dir.open(ANIMATED_SCENES_PATH)
-	animated_entities_dir.list_dir_begin()
+	var err: int = animated_entities_dir.open(ANIMATED_SCENES_PATH)
+	err = animated_entities_dir.list_dir_begin()
+	if err != OK:
+		push_error("Error")
 	
 	while true:
 		var file = animated_entities_dir.get_next()
@@ -232,7 +237,7 @@ func _create_box():
 	box_instance.created_manually = true
 	boxes_parent.add_child(box_instance)
 	box_instance.rect_global_position = get_tree().get_root().get_node("Canvas/MiddlePoint").global_position
-	Utils.save_data(Utils.get_animation_frame(animation_player))
+	Utils.save_data(Utils.get_animation_frame())
 
 func _delete_selected_box():
 	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
@@ -254,7 +259,7 @@ func _delete_selected_box():
 		Utils.clear_selected_box()
 	
 	# Save updated data
-	Utils.save_data(int(animation_player.current_animation_position * 10))
+	Utils.save_data(int(Utils.animation_pos * 10))
 
 func _open_import_popup():
 	$Header/ImportFrame.popup()

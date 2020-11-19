@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/Canvas.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
-[ext_resource path="res://Scripts/GridDrawer.gd" type="Script" id=3]
 [ext_resource path="res://CustomInterfaces/Font.tres" type="DynamicFont" id=4]
 [ext_resource path="res://CustomInterfaces/Hover.tres" type="StyleBox" id=5]
 [ext_resource path="res://CustomInterfaces/Press.tres" type="StyleBox" id=6]
@@ -40,17 +39,6 @@ position = Vector2( 80, 24 )
 script = ExtResource( 2 )
 default_frame_color = Color( 1, 1, 1, 1 )
 playing_frame_color = Color( 1, 0.819608, 0, 1 )
-
-[node name="Grid" type="Control" parent="CanvasLayer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = 3.0
-grow_horizontal = 0
-mouse_filter = 2
-mouse_default_cursor_shape = 3
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource( 3 )
 
 [node name="Header" type="Panel" parent="CanvasLayer"]
 margin_right = 1280.0
@@ -387,8 +375,6 @@ wait_time = 0.02
 
 [node name="SpriteContainer" type="Node2D" parent="."]
 [connection signal="timeout" from="ZoomDelay" to="." method="_on_ZoomDelay_timeout"]
-[connection signal="resized" from="CanvasLayer/Grid" to="." method="_on_Sccreen_resized"]
-[connection signal="resized" from="CanvasLayer/Grid" to="CanvasLayer/Grid" method="_on_Grid_resized"]
 [connection signal="item_selected" from="CanvasLayer/Header/Separator/AnimationSelector" to="CanvasLayer" method="_on_AnimationSelector_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/PlayBtn" to="CanvasLayer" method="_on_PlayBtn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Header/Separator/StopBtn" to="CanvasLayer" method="_on_StopBtn_pressed"]

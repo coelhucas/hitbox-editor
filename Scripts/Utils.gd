@@ -1,8 +1,7 @@
 extends Node
 
 onready var box_scene: PackedScene = preload("res://Scenes/HitBox.tscn")
-onready	var animation_player: AnimationPlayer = get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer")
-onready var sprite = get_node("/root/Canvas/SpriteContainer/Sprite")
+var sprite: Sprite
 
 onready var inspector = get_node("/root/Canvas/CanvasLayer/Inspector")
 onready	var collision_boxes = get_node("/root/Canvas/Boxes")
@@ -24,9 +23,12 @@ const BOX_IDS: Dictionary = {
 	"parry": 3
 }
 
+var animation_player: AnimationPlayer
 var boxes_data: Dictionary = {}
 var selected_box: Dictionary = {}
 var old_selection_data: Dictionary = {}
+
+var animation_pos: float
 
 var is_playing: bool = false
 
@@ -56,8 +58,11 @@ func _ready():
 	
 	extents_input.x.connect("text_changed", self, "_update_box_extents_x")
 	extents_input.y.connect("text_changed", self, "_update_box_extents_y")
+	
+	sprite = get_node_or_null("/root/Canvas/SpriteContainer/Sprite")
+	animation_player = get_node_or_null("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer")
 
-func _process(delta):
+func _process(_delta: float) -> void:
 	if not is_instance_valid(sprite):
 		sprite = get_node("/root/Canvas/SpriteContainer/Sprite") 
 	
@@ -105,22 +110,23 @@ func _update_inspector():
 	inspector.get_node("Container/VerticalSeparator/YAxisContainer/Value").text = str(selected_box.position.y) if selected_box.has("position") else "0"
 	inspector.get_node("Container/VerticalSeparator/XExtentsContainer/Value").text = str(selected_box.extents.x) if selected_box.has("extents") else "0"
 	inspector.get_node("Container/VerticalSeparator/YExtentsContainer/Value").text = str(selected_box.extents.y) if selected_box.has("extents") else "0"
-	inspector.get_node("Container/VerticalSeparator/TypeContainer/Type").select(BOX_IDS[selected_box.type] if selected_box.has("type") else 0)
+	
+	if inspector.get_node("Container/VerticalSeparator/TypeContainer/Type").get_item_count() > 0:
+		inspector.get_node("Container/VerticalSeparator/TypeContainer/Type").select(BOX_IDS[selected_box.type] if selected_box.has("type") else 0)
 	inspector.get_node("Container/VerticalSeparator/KnockbackValue").text = str(selected_box.knockback)
 	inspector.get_node("Container/VerticalSeparator/JuggleValue").text = str(selected_box.juggle)
 	
 	old_selection_data = selected_box
 
 func save_data(current_frame: int):
-	var sprite = Utils.sprite
 	animation_player = Utils.animation_player
 	
 	if Utils.is_playing:
 		return
 	
 	if not is_instance_valid(sprite):
-		sprite = Utils.sprite
-		animation_player = Utils.animation_player
+		push_error("Invalid sprite node.")
+		return
 	
 	var boxes_array: Array = []
 	for box in collision_boxes.get_children():
@@ -166,23 +172,30 @@ func seek_frame(frame: float):
 	
 	if frame > anim_length - ANIMATION_END_OFFSET:
 		animation_player.seek(0, true)
+		frame = 0
 	elif frame < 0:
 		animation_player.seek(anim_length - ANIMATION_END_OFFSET, true)
+		frame = anim_length - ANIMATION_END_OFFSET
 	else:
 		animation_player.seek(frame, true)
 	
-	get_node("/root/Canvas/CanvasLayer/Header/Separator/CurrentFrameLabel").text = "Frame: " + str(int(animation_player.current_animation_position * 10))
+	animation_pos = clamp(frame, 0, anim_length)
+	get_node("/root/Canvas/CanvasLayer/Header/Separator/CurrentFrameLabel").text = "Frame: " + str(int(animation_pos * 10))
 	
 	create_stored_boxes()
 
-func get_animation_frame(anim_player: AnimationPlayer) -> int:
-	return int(anim_player.current_animation_position * 10)
+func get_animation_frame() -> int:
+	return int(Utils.animation_pos * 10)
 
 func create_stored_boxes():
 	clear_current_boxes()
 	sprite = Utils.sprite
-	var animation_player = get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer")
-	var current_frame = str(int(animation_player.current_animation_position * 10))
+	
+	if not is_instance_valid(animation_player):
+		push_error("AnimationPlayer node not valid.")
+		return
+		
+	var current_frame = str(int(Utils.animation_pos * 10))
 	
 	if boxes_data.has(animation_player.assigned_animation):
 		if boxes_data[animation_player.assigned_animation].has(current_frame):
@@ -254,5 +267,5 @@ func _update_box_extents_x(new_value: String):
 func _update_box_extents_y(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
-		box.get_node("Collider").shape.extents.y = int(new_value if new_value != "0" else 1)
+		box.get_node("Collider").shape.extents.y = int(new_value) if new_value != "0" else 1
 		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
