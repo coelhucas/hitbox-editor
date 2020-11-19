@@ -96,7 +96,7 @@ func _input(e):
 			zoom_out()
 	
 	if e is InputEventMouseMotion and not first_camera_drag:
-		$Camera2D.global_position -= e.relative * $Camera2D.zoom.y * 2
+		$Camera2D.global_position -= e.relative * $Camera2D.zoom.x
 
 func zoom_in():
 	if $Camera2D.zoom.x > 0.0625 and can_zoom:

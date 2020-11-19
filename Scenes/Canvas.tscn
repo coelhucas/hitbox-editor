@@ -357,9 +357,13 @@ margin_bottom = 488.0
 placeholder_text = "Value"
 
 [node name="Cursor" type="ColorRect" parent="."]
+visible = false
 margin_right = 1.0
 margin_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Boxes" type="Node2D" parent="."]
 position = Vector2( 80, 24 )
