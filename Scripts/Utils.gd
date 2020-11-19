@@ -7,6 +7,7 @@ onready var sprite = get_node("/root/Canvas/SpriteContainer/Sprite")
 onready var inspector = get_node("/root/Canvas/CanvasLayer/Inspector")
 onready	var collision_boxes = get_node("/root/Canvas/Boxes")
 
+const ANIMATION_PLAYER_PATH: String = "/root/Canvas/SpriteContainer/Sprite/AnimationPlayer"
 const ANIMATION_END_OFFSET: float = 0.1
 const JSON_SUFIX: String = ".json"
 const BOX_TYPES: Dictionary = {
@@ -111,6 +112,8 @@ func _update_inspector():
 	old_selection_data = selected_box
 
 func save_data(current_frame: int):
+	print("Saving at %s" % current_frame)
+	print("Saving at %s " % animation_player.assigned_animation)
 	var sprite = Utils.sprite
 	animation_player = Utils.animation_player
 	
@@ -158,14 +161,8 @@ func clear_current_boxes():
 		child.free()
 
 func seek_frame(frame: float):
-	print(frame < 0)
-	
 	if not is_instance_valid(animation_player):
-		print("Gettinh a new")
 		animation_player = get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer")
-	
-	print("Anim: %s" % animation_player.assigned_animation)
-	save_data(int(animation_player.current_animation_position * 10))
 	
 	var anim_length: float = animation_player.get_animation(animation_player.assigned_animation).length
 	
@@ -180,6 +177,9 @@ func seek_frame(frame: float):
 	get_node("/root/Canvas/CanvasLayer/Header/Separator/CurrentFrameLabel").text = "Frame: " + str(int(animation_player.current_animation_position * 10))
 	
 	create_stored_boxes()
+
+func get_animation_frame(anim_player: AnimationPlayer) -> int:
+	return int(anim_player.current_animation_position * 10)
 
 func create_stored_boxes():
 	clear_current_boxes()

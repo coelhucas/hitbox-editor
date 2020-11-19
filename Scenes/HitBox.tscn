@@ -32,6 +32,9 @@ focus_next = NodePath("Guide")
 focus_previous = NodePath("Guide")
 focus_mode = 1
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 hitbox_color = Color( 0, 1, 0.462745, 0.184314 )
 hurtbox_color = Color( 1, 0, 0, 0.172549 )
 taunt_color = Color( 1, 0.819608, 0, 1 )

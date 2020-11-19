@@ -58,7 +58,7 @@ func _ready():
 	$Right.connect("button_up", self, "_right_scaler_up")
 	$Down.connect("button_up", self, "_down_scaler_up")
 	
-	current_frame = int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10)
+	current_frame = Utils.get_animation_frame(get_node(Utils.ANIMATION_PLAYER_PATH))
 	
 	use_custom_type(hit_type, false)
 	
@@ -75,8 +75,8 @@ func _process(delta):
 	if not is_instance_valid(sprite):
 		sprite = get_node("/root/Canvas/Sprite")
 	
-	if current_frame != int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10):
-		current_frame = int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10)
+	if current_frame != Utils.get_animation_frame(get_node(Utils.ANIMATION_PLAYER_PATH)):
+		current_frame = Utils.get_animation_frame(get_node(Utils.ANIMATION_PLAYER_PATH))
 	
 	if is_hovered and Input.is_action_pressed("mouse_left"):
 		get_parent().move_child(self, get_parent().get_child_count() - 1)

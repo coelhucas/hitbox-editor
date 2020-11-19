@@ -160,7 +160,6 @@ func _update_sprite_selector():
 	for animation in new_sprite_animations:
 		$Header/Separator/AnimationSelector.add_item(animation)
 	$Header/Separator/AnimationSelector.select(0)
-	pass
 		
 func _file_option_selected(ID: int):
 	match ID:
@@ -207,11 +206,13 @@ func _on_AnimationSelector_item_selected(ID):
 		if node is AnimationPlayer:
 			animation_player = node
 
-	animation_player.current_animation = animation_player.get_animation_list()[ID]
 	animation_player.seek(0, true)
+	animation_player.current_animation = animation_player.get_animation_list()[ID]
 	if animation_player.is_playing():
 		animation_player.stop()
-	Utils.is_playing = false
+		Utils.is_playing = false
+	Utils.seek_frame(0)
+	Utils.create_stored_boxes()
 
 
 func _on_PlayBtn_pressed():
@@ -234,6 +235,7 @@ func _create_box():
 	box_instance.created_manually = true
 	boxes_parent.add_child(box_instance)
 	box_instance.rect_global_position = get_tree().get_root().get_node("Canvas/MiddlePoint").global_position
+	Utils.save_data(Utils.get_animation_frame(animation_player))
 
 func _delete_selected_box():
 	var boxes_parent = get_tree().get_root().get_node("Canvas/Boxes")
