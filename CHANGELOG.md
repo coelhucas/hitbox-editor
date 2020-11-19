@@ -1,5 +1,12 @@
 # Changelog
 
+### [11-19-2020] (v0.2.0) General improvements
+- [ADDED] New import feature, to "append" `boxes_data`
+- [CHANGED] Open dialog now overwrite the current boxes data, instead of appending (use new import instead)
+- [FIX] Fix dozen of console errors and warnings
+- [FIX] Fix issue where the added box was saved in other animations of the same frame after changing the selected animation
+- [FIX] Minor usability improvements
+
 ### [08-22-2020] (v0.1.1) Fix incompatibility issues with Godot 3.2.1
 - [ADDED] `.json` sufix to saved files;
 - [ADDED] an example containing the current necessary node structure;
