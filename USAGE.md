@@ -95,7 +95,7 @@ With this data you can make a simple parser in any engine/framework to handle an
 - `Left/Right arrows` -> prev/next frame;
 - `P/S` -> plays/stops the current animation.
 
-* Instead of replacing your current boxes, it "append" them to the imported ones.
+*- Instead of replacing your current boxes, it "append" them to the imported ones.
 
 Feel free to suggest changes and new shortcuts [here](https://github.com/coelhucas/hitbox-editor/issues).
 
