@@ -173,6 +173,10 @@ func save_data(current_frame: int):
 			str(current_frame): boxes_array	
 		}
 
+func wipe_data() -> void:
+	clear_current_boxes()
+	Utils.boxes_data = {}
+
 func clear_current_boxes():
 	for child in collision_boxes.get_children():
 		child.free()
@@ -243,14 +247,14 @@ func _update_hitbox_knockback(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.knockback = int(new_value)
-		save_data(int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10))
+		save_data(int(animation_pos * 10))
 
 # Saved here for now
 func _update_hitbox_juggle(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.juggle = int(new_value)
-		save_data(int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10))
+		save_data(int(animation_pos * 10))
 
 # Below properties need to be saved manually here
 func _update_box_position_x(new_value: String):
@@ -260,7 +264,7 @@ func _update_box_position_x(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.rect_global_position.x = int(new_value) + int(sprite.global_position.x)
-		save_data(int(get_node("/root/Canvas/SpriteContainer/Sprite/AnimationPlayer").current_animation_position * 10))
+		save_data(int(animation_pos * 10))
 			
 func _update_box_position_y(new_value: String):
 	if not is_instance_valid(sprite):
@@ -269,16 +273,16 @@ func _update_box_position_y(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.rect_global_position.y = int(new_value) + int(sprite.global_position.y)
-		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
+		save_data(int(animation_pos * 10))
 			
 func _update_box_extents_x(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.get_node("Collider").shape.extents.x = int(new_value)
-		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
+		save_data(int(animation_pos * 10))
 		
 func _update_box_extents_y(new_value: String):
 	var box = get_node("/root/Canvas/Boxes/" + selected_box.name)
 	if is_instance_valid(box):
 		box.get_node("Collider").shape.extents.y = int(new_value) if new_value != "0" else 1
-		save_data(int(get_node("/root/CanvasSpriteContainer/SpriteAnimationPlayer").current_animation_position * 10))
+		save_data(int(animation_pos * 10))

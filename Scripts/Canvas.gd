@@ -87,7 +87,10 @@ func mouse_update():
 		pass
 
 func _input(e):
-	if (e is InputEventMouseButton and not $CanvasLayer/Header/SaveFile.visible) and not $CanvasLayer/Header/OpenFile.visible:
+	if Utils.has_popup_open():
+		return
+	
+	if (e is InputEventMouseButton and not $CanvasLayer/SaveFile.visible) and not $CanvasLayer/OpenFile.visible:
 		if e.button_index == BUTTON_WHEEL_UP:
 			zoom_in()
 		

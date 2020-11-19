@@ -166,12 +166,14 @@ margin_right = 838.0
 margin_bottom = 401.0
 rect_pivot_offset = Vector2( 102, 28 )
 window_title = "Import from frame...."
+dialog_text = "
+"
 
 [node name="Separator" type="HBoxContainer" parent="CanvasLayer/Header/ImportFrame"]
 margin_left = 8.0
-margin_top = 8.0
+margin_top = 55.0
 margin_right = 271.0
-margin_bottom = 40.0
+margin_bottom = 87.0
 
 [node name="From" type="LineEdit" parent="CanvasLayer/Header/ImportFrame/Separator"]
 margin_right = 263.0
@@ -179,34 +181,6 @@ margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Frame ID"
-
-[node name="SaveFile" type="FileDialog" parent="CanvasLayer/Header" groups=[
-"popup",
-]]
-margin_left = 391.0
-margin_top = 171.0
-margin_right = 894.0
-margin_bottom = 586.0
-popup_exclusive = true
-resizable = true
-access = 2
-current_dir = "/media/Files/projects/hitbox-editor"
-current_path = "/media/Files/projects/hitbox-editor/"
-
-[node name="OpenFile" type="FileDialog" parent="CanvasLayer/Header" groups=[
-"popup",
-]]
-margin_left = 389.0
-margin_top = 171.0
-margin_right = 894.0
-margin_bottom = 586.0
-popup_exclusive = true
-window_title = "Open a File"
-resizable = true
-mode = 0
-access = 2
-current_dir = "/media/Files/projects/hitbox-editor"
-current_path = "/media/Files/projects/hitbox-editor/"
 
 [node name="Inspector" type="WindowDialog" parent="CanvasLayer"]
 visible = true
@@ -365,6 +339,53 @@ margin_top = 456.0
 margin_right = 157.0
 margin_bottom = 488.0
 placeholder_text = "Value"
+
+[node name="SaveFile" type="FileDialog" parent="CanvasLayer" groups=[
+"popup",
+]]
+margin_left = 391.0
+margin_top = 171.0
+margin_right = 1032.0
+margin_bottom = 586.0
+popup_exclusive = true
+resizable = true
+access = 2
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
+
+[node name="OpenFile" type="FileDialog" parent="CanvasLayer" groups=[
+"popup",
+]]
+margin_left = 389.0
+margin_top = 171.0
+margin_right = 1142.0
+margin_bottom = 586.0
+popup_exclusive = true
+window_title = "Open a File"
+resizable = true
+dialog_text = "
+WARNING: Your current data will be override.
+If you want to import over the current changes, use import instead.
+
+"
+mode = 0
+access = 2
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
+
+[node name="ImportFile" type="FileDialog" parent="CanvasLayer" groups=[
+"popup",
+]]
+margin_left = 389.0
+margin_top = 171.0
+margin_right = 894.0
+margin_bottom = 586.0
+popup_exclusive = true
+window_title = "Import a Fidadle"
+mode = 0
+access = 2
+current_dir = "/media/Files/projects/hitbox-editor"
+current_path = "/media/Files/projects/hitbox-editor/"
 
 [node name="Cursor" type="ColorRect" parent="."]
 visible = false

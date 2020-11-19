@@ -18,24 +18,27 @@ var sprite
 func _ready():
 	$Inspector.visible = true
 	
-	$Header/SaveFile.add_filter("*.JSON ; JSON Files")
-	$Header/OpenFile.add_filter("*.JSON ; JSON Files")
+	$SaveFile.add_filter("*.JSON ; JSON Files")
+	$OpenFile.add_filter("*.JSON ; JSON Files")
+	$ImportFile.add_filter("*.JSON ; JSON Files")
 	
 	var err: int
-	err = $Header/SaveFile.connect("confirmed", self, "_save_at_dir")
-	err = $Header/OpenFile.connect("file_selected", self, "_open_file")
+	err = $SaveFile.connect("confirmed", self, "_save_at_dir")
+	err = $OpenFile.connect("file_selected", self, "_open_file")
+	err = $ImportFile.connect("file_selected", self, "_import_file")
 	
 	var file_popup = $Header/Separator/File.get_popup()
 	err = file_popup.connect("id_pressed", self, "_file_option_selected")
-	file_popup.add_item("Open (CTRL+O)")
 	file_popup.add_item("Save (CTRL+S)")
+	file_popup.add_item("Open (CTRL+O)")
+	file_popup.add_item("Import (CTRL+I)")
 	file_popup.add_item("Open Inspector (I)")
 	
 	var box_popup = $Header/Separator/Box.get_popup()
 	err = box_popup.connect("id_pressed", self, "_box_option_selected")
 	box_popup.add_item("New (A)")
 	box_popup.add_item("Delete selected (Z)")
-	box_popup.add_item("Import from another frame (CTRL+I)")
+	box_popup.add_item("Import from another frame (SHIFT+I)")
 	
 	
 	err = $Header/ImportFrame.connect("confirmed", self, "_import_frame_data")
@@ -96,12 +99,16 @@ func _process(_delta: float) -> void:
 		
 	# File
 	if Input.is_action_just_pressed("save_file"):
-		$Header/SaveFile.visible = true
-		$Header/SaveFile.invalidate()
+		$SaveFile.popup_centered()
+		$SaveFile.invalidate()
 	
 	if Input.is_action_just_pressed("open_file"):
-		$Header/OpenFile.visible = true
-		$Header/OpenFile.invalidate()
+		$OpenFile.popup_centered()
+		$OpenFile.invalidate()
+	
+	if Input.is_action_just_pressed("import"):
+		$ImportFile.popup_centered()
+		$ImportFile.invalidate()
 	
 func _setup_initial_sprite():
 	var sprite_path: String = ANIMATED_SCENES_PATH + animated_entities_list[0]
@@ -165,16 +172,21 @@ func _update_sprite_selector():
 func _file_option_selected(ID: int):
 	match ID:
 		0:
-			$Header/OpenFile.visible = true
-			$Header/OpenFile.invalidate()
-			if $Header/SaveFile.visible:
-				$Header/SaveFile.visible = false
+			$SaveFile.popup_centered()
+			$SaveFile.invalidate()
+			if $OpenFile.visible:
+				$OpenFile.visible = false
 		1:
-			$Header/SaveFile.visible = true
-			$Header/SaveFile.invalidate()
-			if $Header/OpenFile.visible:
-				$Header/OpenFile.visible = false
-		2: _open_inspector()
+			$OpenFile.popup_centered()
+			$OpenFile.invalidate()
+			if $SaveFile.visible:
+				$SaveFile.visible = false
+		2:
+			$ImportFile.popup_centered()
+			$ImportFile.invalidate()
+			if $SaveFile.visible:
+				$SaveFile.visible = false
+		3: _open_inspector()
 				
 func _box_option_selected(ID: int):
 	match ID:
@@ -183,20 +195,33 @@ func _box_option_selected(ID: int):
 		2: _open_import_popup()
 
 func _save_at_dir():
-	var dir: String = $Header/SaveFile.get_current_path()
+	var dir: String = $SaveFile.get_current_path()
 	var file = File.new()
 	file.open(dir + Utils.JSON_SUFIX, File.WRITE)
 	file.store_string(to_json(Utils.boxes_data))
 	file.close()
 
 func _open_file(dir: String):
+	Utils.wipe_data()
 	var file = File.new()
 	if not file.file_exists(dir):
 		return
 	
 	file.open(dir, File.READ)
 	Utils.boxes_data = parse_json(file.get_as_text())
-	_import_frame_data()
+	var frame_string: String = $Header/Separator/CurrentFrameLabel.text.replace("Frame: ", "")
+	_import_frame_data(frame_string)
+	file.close()
+
+func _import_file(dir: String) -> void:
+	var file = File.new()
+	if not file.file_exists(dir):
+		return
+	
+	file.open(dir, File.READ)
+	Utils.boxes_data = parse_json(file.get_as_text())
+	var frame_string: String = $Header/Separator/CurrentFrameLabel.text.replace("Frame: ", "")
+	_import_frame_data(frame_string)
 	file.close()
 
 func _open_inspector():
@@ -263,10 +288,10 @@ func _delete_selected_box():
 func _open_import_popup():
 	$Header/ImportFrame.popup()
 
-func _import_frame_data() -> void:
+func _import_frame_data(frame: String = "") -> void:
 	# Save selected frame	
-	var selected_frame: String = str(int($Header/ImportFrame/Separator/From.text))
-	
+	var selected_frame: String = str(int($Header/ImportFrame/Separator/From.text)) if frame == "" else frame
+	print(selected_frame)
 	# Clears the import frame text
 	$Header/ImportFrame/Separator/From.text = ""
 	
