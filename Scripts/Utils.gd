@@ -112,8 +112,6 @@ func _update_inspector():
 	old_selection_data = selected_box
 
 func save_data(current_frame: int):
-	print("Saving at %s" % current_frame)
-	print("Saving at %s " % animation_player.assigned_animation)
 	var sprite = Utils.sprite
 	animation_player = Utils.animation_player
 	
@@ -169,7 +167,6 @@ func seek_frame(frame: float):
 	if frame > anim_length - ANIMATION_END_OFFSET:
 		animation_player.seek(0, true)
 	elif frame < 0:
-		print(animation_player.current_animation_length)
 		animation_player.seek(anim_length - ANIMATION_END_OFFSET, true)
 	else:
 		animation_player.seek(frame, true)

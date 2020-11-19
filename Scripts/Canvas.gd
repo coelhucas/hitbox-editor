@@ -128,9 +128,7 @@ func _on_screen_resized():
 	grid_ready = false
 
 func _continue_animation_timeout():
-	print("Ula")
 	if not Utils.is_playing:
-		print("La")
 		return
 
 	Utils.seek_frame($SpriteContainer/Sprite/AnimationPlayer.current_animation_position + 0.1)

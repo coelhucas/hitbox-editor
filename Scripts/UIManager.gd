@@ -84,7 +84,6 @@ func _process(delta):
 	# Animation
 	if Input.is_action_just_pressed("stop_animation") and Utils.is_playing:
 		Utils.is_playing = false
-		print("false")
 	
 	if Input.is_action_just_pressed("play_animation") and $Header/Separator/SpriteSelector.get_item_count() > 0:
 		Utils.is_playing = true
@@ -106,8 +105,6 @@ func _setup_initial_sprite():
 	var new_sprite = load(sprite_path).instance()
 	new_sprite.name = "Sprite"
 	new_sprite.global_position = get_parent().get_node("MiddlePoint").global_position
-	print(new_sprite.get_children())
-	print(new_sprite.get_node("AnimationPlayer").is_playing())
 	new_sprite.get_node("AnimationPlayer").stop()
 	get_node("/root/Canvas/SpriteContainer").add_child(new_sprite, true)
 #	_update_sprite_selector()
